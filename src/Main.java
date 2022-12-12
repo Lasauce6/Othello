@@ -1,5 +1,8 @@
-import othello.graphics.Client;
+
+import othello.Actions;
 import othello.Board;
+
+import java.io.IOException;
 
 public class Main {
     /**
@@ -7,9 +10,6 @@ public class Main {
      */
     public static void main(String[] args) {
         Board board = new Board();
-        Client client = new Client();
-        client.menu(board);
+        Actions actions = new Actions(board);
     }
-
-
 }

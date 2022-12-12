@@ -54,6 +54,26 @@ public class Board {
         return numberOfMoves;
     }
 
+    public void setNumberOfMoves(int numberOfMoves) {
+        this.numberOfMoves = numberOfMoves;
+    }
+
+    public int[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(int[][] board) {
+        this.board = board;
+    }
+
+    public Cell[][] getCellBoard() {
+        return cellBoard;
+    }
+
+    public void setCellBoard(Cell[][] cellBoard) {
+        this.cellBoard = cellBoard;
+    }
+
     public void move(Cell cell) {
         if (cell != null) {
             numberOfMoves++;
