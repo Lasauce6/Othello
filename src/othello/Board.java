@@ -54,12 +54,24 @@ public class Board {
         return numberOfMoves;
     }
 
+    public void setNumberOfMoves(int numberOfMoves) {
+        this.numberOfMoves = numberOfMoves;
+    }
+
     public int[][] getBoard() {
         return board;
     }
 
+    public void setBoard(int[][] board) {
+        this.board = board;
+    }
+
     public Cell[][] getCellBoard() {
         return cellBoard;
+    }
+
+    public void setCellBoard(Cell[][] cellBoard) {
+        this.cellBoard = cellBoard;
     }
 
     public void move(Cell cell) {
@@ -67,9 +79,6 @@ public class Board {
             numberOfMoves++;
             board[cell.r()][cell.c()] = cell.player();
             cellBoard[cell.r()][cell.c()] = cell;
-            for (int i = 0; i < 8; i++) {
-//                 TODO : flip les pions dans les 8 directions
-            }
         }
     }
 }
