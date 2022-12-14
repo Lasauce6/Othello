@@ -1,15 +1,15 @@
-
 import othello.Actions;
 import othello.Board;
-
-import java.io.IOException;
+import othello.Color;
 
 public class Main {
     /**
      * Lancement du menu principal
      */
     public static void main(String[] args) {
-        Board board = new Board();
+        Board board = new Board(8);
         Actions actions = new Actions(board);
+        actions.printBoard();
+        System.out.println(board.getPossibleMoves(Color.BLACK));
     }
 }

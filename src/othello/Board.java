@@ -1,52 +1,40 @@
 package othello;
 
-public class Board {
-    private static final int SIZE = 8;
-    private int[][] board;
-    private int numberOfMoves;
-    private Cell[][] cellBoard = new Cell[SIZE][SIZE];
+import java.awt.*;
+import java.util.ArrayList;
 
-    public Board(int[][] board, int numberOFMoves) {
+public class Board {
+    private final int SIZE;
+    private Color[][] board;
+    private int numberOfMoves;
+
+    public Board(Color[][] board, int numberOFMoves, int SIZE) {
+        this.SIZE = SIZE;
         this.board = board;
         this.numberOfMoves = numberOFMoves;
-        for (int c = 0; c < SIZE; c++) {
-            for (int r = 0; r < SIZE; r++) {
-                    cellBoard[r][c] = new Cell(r, c);
-            }
-        }
     }
 
     public Board(Board board) {
-        this.board = new int[SIZE][SIZE];
+        this.SIZE = board.getSize();
+        this.board = new Color[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             System.arraycopy(board.board[i], 0, this.board[i], 0, SIZE);
         }
         this.numberOfMoves = board.numberOfMoves;
-        for (int i = 0; i < SIZE; i++) {
-            System.arraycopy(board.cellBoard[i], 0, this.cellBoard[i], 0, SIZE);
-        }
     }
 
-    public Board() {
-        this.board = new int[SIZE][SIZE];
-        board[3][3] = 1;
-        board[3][4] = -1;
-        board[4][3] = -1;
-        board[4][4] = 1;
-        for (int c = 0; c < SIZE; c++) {
-            for (int r = 0; r < SIZE; r++) {
-                cellBoard[r][c] = new Cell(r, c);
-            }
-        }
-        cellBoard[3][3] = new Cell(3, 3, 1);
-        cellBoard[3][4] = new Cell(3, 4, -1);
-        cellBoard[4][3] = new Cell(4, 3, -1);
-        cellBoard[4][4] = new Cell(4, 4, 1);
+    public Board(int SIZE) {
+        this.SIZE = SIZE;
+        this.board = new Color[SIZE][SIZE];
+        board[3][3] = Color.WHITE;
+        board[3][4] = Color.BLACK;
+        board[4][3] = Color.BLACK;
+        board[4][4] = Color.WHITE;
         this.numberOfMoves = 0;
 
     }
 
-    public static int getSIZE() {
+    public int getSize() {
         return SIZE;
     }
 
@@ -58,27 +46,37 @@ public class Board {
         this.numberOfMoves = numberOfMoves;
     }
 
-    public int[][] getBoard() {
+    public Color[][] getBoard() {
         return board;
     }
 
-    public void setBoard(int[][] board) {
+    public void setBoard(Color[][] board) {
         this.board = board;
     }
 
-    public Cell[][] getCellBoard() {
-        return cellBoard;
-    }
-
-    public void setCellBoard(Cell[][] cellBoard) {
-        this.cellBoard = cellBoard;
-    }
-
-    public void move(Cell cell) {
-        if (cell != null) {
+    public void move(int r, int c, Color player) {
+        if (r < SIZE && r >= 0 && c < SIZE && c>= 0 && player != Color.EMPTY) {
             numberOfMoves++;
-            board[cell.r()][cell.c()] = cell.player();
-            cellBoard[cell.r()][cell.c()] = cell;
+            board[r][c] = player;
         }
+    }
+
+    public ArrayList<Point> getPossibleMoves(Color player) {
+        ArrayList<Point> list = new ArrayList<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (board[i][j] == Color.EMPTY) {
+                    if (isPossibleMove(i, j, player)) {
+                        list.add(new Point(i, j));
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    private boolean isPossibleMove(int r, int c, Color player) {
+        // TODO : retourner si un coup est possible
+        return false;
     }
 }
