@@ -7,9 +7,8 @@ public class Main {
      * Lancement du menu principal
      */
     public static void main(String[] args) {
-        Board board = new Board(8);
+        Board board = new Board(10);
         Actions actions = new Actions(board);
-        actions.printBoard();
-        System.out.println(board.getPossibleMoves(Color.BLACK));
+        actions.play(Color.BLACK);
     }
 }

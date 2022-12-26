@@ -1,5 +1,9 @@
 package othello;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Actions {
     private final Board board;
 
@@ -8,6 +12,7 @@ public class Actions {
     }
 
     public void printBoard() {
+        //TODO: changer l'affichage des lettres en fonction de la taille du tableau
         String ANSI_RESET = "\u001B[0m";
         String ANSI_BLACK = "\u001B[30m";
         String ANSI_WHITE_BACKGROUND = "\u001B[47m";
@@ -22,6 +27,9 @@ public class Actions {
                 } else if (color == Color.WHITE) {
                     String ANSI_WHITE = "\u001B[97m";
                     System.out.print(ANSI_WHITE + "●");
+                } else if (color == Color.POSSIBLE_MOVE) {
+                    String ANSI_GREEN = "\u001B[32m";
+                    System.out.print(ANSI_GREEN + "●");
                 } else {
                     System.out.print(" ");
                 }
@@ -41,5 +49,62 @@ public class Actions {
         } catch (final Exception e) {
             System.out.println("Error: " + e);
         }
+    }
+
+    private void printScore() {
+        int black = 0;
+        int white = 0;
+        for (Color[] row : board.getBoard()) {
+            for (Color color : row) {
+                if (color == Color.BLACK) black++;
+                else if (color == Color.WHITE) white++;
+            }
+        }
+        System.out.println("Score: " + black + " - " + white);
+    }
+
+    private Color getOppositeColor(Color player) {
+        if (player == Color.BLACK) {
+            return Color.WHITE;
+        } else if (player == Color.WHITE) {
+            return Color.BLACK;
+        } else {
+            return Color.EMPTY;
+        }
+    }
+
+    public void play(Color color) {
+        board.setPossibleMoves(color);
+        while (board.getPossibleMoves().size() > 0) {
+            if (color == Color.BLACK) System.out.println("Tour du joueur noir");
+            else System.out.println("Tour du joueur blanc");
+
+            board.setPossibleMoves(color);
+            ArrayList<Point> possibleMoves = board.getPossibleMoves();
+            printBoard();
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Entrer votre coup : ");
+            String move = scanner.nextLine();
+            while (move.length() < 2) {
+                System.out.print("Coup impossible réessayez : ");
+                move = scanner.nextLine();
+            }
+            int x = move.charAt(1) - '1';
+            int y = move.charAt(0) - 'A';
+            Point point = new Point(x, y);
+            while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
+                System.out.print("Coup impossible réessayez : ");
+                move = scanner.nextLine();
+                x = move.charAt(1) - '1';
+                y = move.charAt(0) - 'A';
+                point = new Point(x, y);
+            }
+
+            board.move(point.x, point.y, color);
+            color = getOppositeColor(color);
+            clearScreen();
+        }
+        printScore();
     }
 }

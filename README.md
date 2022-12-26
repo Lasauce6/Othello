@@ -2,7 +2,7 @@
 <br />
 <div align="center">
     <a href="https://git-etudiants.lacl.fr/u32100235/othello">
-        <img src="img/logo.png" alt="Logo" width="80" height="80">
+        <img src="img/logo.png" alt="Logo" width="101" height="99">
     </a>
     <h3 align="center">Othello</h3>
 </div>
