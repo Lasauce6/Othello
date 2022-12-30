@@ -124,8 +124,10 @@ public class Actions {
 
             if (board.getPossibleMoves(Color.WHITE).size() == 0 && board.getPossibleMoves(Color.BLACK).size() == 0) break;
             else if (board.getMoves().size() == 0) {
-                System.out.println("Aucun coup possible pour le joueur " + color);
+                if (color == Color.BLACK) System.out.println("Aucun coup possible pour le joueur noir");
+                else System.out.println("Aucun coup possible pour le joueur blanc");
                 color = getOppositeColor(color);
+                board.setPossibleMoves(color);
             }
 
             clearScreen();
