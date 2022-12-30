@@ -15,7 +15,7 @@ We made this project for our third semester.
 
 ## Todo list : 
 - [x] Implémenter le plateau de jeu
-- [ ] Implémenter les algorithmes de logique de jeu
+- [X] Implémenter les algorithmes de logique de jeu
 - [ ] Implémenter l'algorithme de l'IA
 - [ ] Implémenter l'interface graphique
 

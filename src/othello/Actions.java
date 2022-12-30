@@ -12,15 +12,20 @@ public class Actions {
     }
 
     public void printBoard() {
-        //TODO: changer l'affichage des lettres en fonction de la taille du tableau
         String ANSI_RESET = "\u001B[0m";
         String ANSI_BLACK = "\u001B[30m";
         String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-        System.out.println(ANSI_WHITE_BACKGROUND + ANSI_BLACK + "    A  B  C  D  E  F  G  H    " + ANSI_RESET);
+        System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + "  ");
+        for (int i = 0; i < board.getSize(); i++) {
+            System.out.print("  " + (char) ('A' + i));
+        }
+        System.out.println("    " + ANSI_RESET);
+
         int count = 1;
         for (Color[] row : board.getBoard()) {
-            System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + " " + count + "  ");
+            if (count < 10) System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + " " + count + "  ");
+            else System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + count + "  ");
             for (Color color : row) {
                 if (color == Color.BLACK) {
                     System.out.print(ANSI_BLACK + "●");
@@ -35,10 +40,16 @@ public class Actions {
                 }
                 System.out.print("  ");
             }
-            System.out.println(ANSI_WHITE_BACKGROUND + ANSI_BLACK + count + " " + ANSI_RESET);
+            if (count < 10) System.out.println(ANSI_WHITE_BACKGROUND + ANSI_BLACK + count + " " + ANSI_RESET);
+            else System.out.println(ANSI_WHITE_BACKGROUND + ANSI_BLACK + count + ANSI_RESET);
             count++;
         }
-        System.out.println(ANSI_WHITE_BACKGROUND + ANSI_BLACK + "    A  B  C  D  E  F  G  H    " + ANSI_RESET);
+
+        System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + "  ");
+        for (int i = 0; i < board.getSize(); i++) {
+            System.out.print("  " + (char) ('A' + i));
+        }
+        System.out.println("    " + ANSI_RESET);
     }
 
     public void clearScreen() { // ne fonctionne pas sur un IDE
@@ -60,7 +71,7 @@ public class Actions {
                 else if (color == Color.WHITE) white++;
             }
         }
-        System.out.println("Score: " + black + " - " + white);
+        System.out.println("Score: " + black + "(N) - " + white + "(B)");
     }
 
     private Color getOppositeColor(Color player) {
@@ -74,13 +85,18 @@ public class Actions {
     }
 
     public void play(Color color) {
+        play(color, false);
+    }
+
+    private void play(Color color, boolean loop) {
         board.setPossibleMoves(color);
-        while (board.getPossibleMoves().size() > 0) {
+        while (board.getMoves().size() > 0) {
+            ArrayList<Point> possibleMoves = board.getMoves();
+            if (possibleMoves.size() == 0) break;
+
             if (color == Color.BLACK) System.out.println("Tour du joueur noir");
             else System.out.println("Tour du joueur blanc");
 
-            board.setPossibleMoves(color);
-            ArrayList<Point> possibleMoves = board.getPossibleMoves();
             printBoard();
 
             Scanner scanner = new Scanner(System.in);
@@ -102,9 +118,24 @@ public class Actions {
             }
 
             board.move(point.x, point.y, color);
+
             color = getOppositeColor(color);
+            board.setPossibleMoves(color);
+
+            int white = board.getPossibleMoves(Color.WHITE).size();
+            int black = board.getPossibleMoves(Color.BLACK).size();
+
+            if (board.getPossibleMoves(Color.WHITE).size() == 0 && board.getPossibleMoves(Color.BLACK).size() == 0) break;
+            else if (board.getMoves().size() == 0) {
+                System.out.println("Aucun coup possible pour le joueur " + color);
+                color = getOppositeColor(color);
+            }
+
             clearScreen();
         }
+        printBoard();
         printScore();
+        System.out.println("Fin de la partie");
+
     }
 }

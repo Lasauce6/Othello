@@ -36,12 +36,11 @@ public class Board {
                 this.board[i][j] = Color.EMPTY;
             }
         }
-        //TODO: changer l'emplacement des pions en fonction de la taille du tableau
-        board[3][3] = Color.WHITE;
-        board[3][4] = Color.BLACK;
-        board[4][3] = Color.BLACK;
-        board[4][4] = Color.WHITE;
-        this.numberOfMoves = 0;
+        board[(SIZE / 2) - 1 ][(SIZE / 2) - 1] = Color.WHITE;
+        board[(SIZE / 2) - 1][SIZE / 2] = Color.BLACK;
+        board[SIZE / 2][(SIZE / 2) - 1] = Color.BLACK;
+        board[SIZE / 2][SIZE / 2] = Color.WHITE;
+        this.numberOfMoves = 4;
 
     }
 
@@ -104,11 +103,12 @@ public class Board {
         }
     }
 
-    private ArrayList<Point> getPossibleMoves(Color player) {
+    public ArrayList<Point> getPossibleMoves(Color player) {
         ArrayList<Point> list = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                if (board[i][j] == Color.EMPTY && isAdjacentOppositeColor(i, j, player)) { // si la case est vide et qu'il y a une case de la couleur adverse adjacente
+                if (board[i][j] == Color.EMPTY && isAdjacentOppositeColor(i, j, player)
+                        || board[i][j] == Color.POSSIBLE_MOVE && isAdjacentOppositeColor(i, j, player)) { // si la case est vide et qu'il y a une case de la couleur adverse adjacente
                     if(isPossibleMoveInDirection(i, j, player, -1, -1)
                             || isPossibleMoveInDirection(i, j, player, -1, 0)
                             || isPossibleMoveInDirection(i, j, player, -1, 1)
@@ -125,7 +125,7 @@ public class Board {
         return list;
     }
 
-    public ArrayList<Point> getPossibleMoves() {
+    public ArrayList<Point> getMoves() {
         ArrayList<Point> list = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
