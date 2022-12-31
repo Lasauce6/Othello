@@ -4,17 +4,17 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
-    private final int SIZE;
+    private final int SIZE; //on met la taille en private final afin que personne ne puisse la changer
     private Color[][] board;
-    private int numberOfMoves;
+    private int numberOfMoves;//entier qui définit le nombre de coup/mouvement
 
-    public Board(Color[][] board, int numberOFMoves, int SIZE) {
+    public Board(Color[][] board, int numberOFMoves, int SIZE) {//methode board qui prend en parametre la couleur, le nombre de mouvement et sa taille.
         this.SIZE = SIZE;
         this.board = board;
         this.numberOfMoves = numberOFMoves;
     }
 
-    public Board(Board board) {
+    public Board(Board board) {//methode qui creer un nouveau tableau
         this.SIZE = board.getSize();
         this.board = new Color[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
@@ -23,7 +23,7 @@ public class Board {
             }
         }
         for (int i = 0; i < SIZE; i++) {
-            System.arraycopy(board.board[i], 0, this.board[i], 0, SIZE);
+            System.arraycopy(board.board[i], 0, this.board[i], 0, SIZE);//arraycopy et une fonction implementer en java qui copie l arraylist deja utiliser
         }
         this.numberOfMoves = board.numberOfMoves;
     }
@@ -44,28 +44,28 @@ public class Board {
 
     }
 
-    public int getSize() {
+    public int getSize() {//getter de la taille
         return SIZE;
     }
 
-    public int getNumberOfMoves() {
+    public int getNumberOfMoves() {//getter du nombre de mouvement
         return numberOfMoves;
     }
 
-    public void setNumberOfMoves(int numberOfMoves) {
+    public void setNumberOfMoves(int numberOfMoves) {//setter du nombre de mouvement
         this.numberOfMoves = numberOfMoves;
     }
 
-    public Color[][] getBoard() {
+    public Color[][] getBoard() {//getter du tableau/plateau
         return board;
     }
 
-    public void setBoard(Color[][] board) {
+    public void setBoard(Color[][] board) {//setter du tableau/plateau
         this.board = board;
     }
 
 
-    public void move(int r, int c, Color player) {
+    public void move(int r, int c, Color player) {//methode move qui fait changer le tour du joueur
         if (r < SIZE && r >= 0 && c < SIZE && c >= 0 && player != Color.EMPTY) {
             numberOfMoves++;
             board[r][c] = player;
@@ -89,7 +89,7 @@ public class Board {
         }
     }
 
-    public void setPossibleMoves(Color color) {
+    public void setPossibleMoves(Color color) {//setter des coups possibles
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (board[i][j] == Color.POSSIBLE_MOVE) {
