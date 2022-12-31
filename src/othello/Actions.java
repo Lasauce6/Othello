@@ -132,6 +132,8 @@ public class Actions {
 
             clearScreen();
         }
+
+        
         printBoard();
         printScore();
         System.out.println("Fin de la partie");
