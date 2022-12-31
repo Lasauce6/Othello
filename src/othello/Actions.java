@@ -99,26 +99,26 @@ public class Actions {
 
             printBoard();
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Entrer votre coup : ");
-            String move = scanner.nextLine();
-            while (move.length() < 2) {
-                System.out.print("Coup impossible réessayez : ");
-                move = scanner.nextLine();
-            }
-            int x = move.charAt(1) - '1';
-            int y = move.charAt(0) - 'A';
-            Point point = new Point(x, y);
-            while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
-                System.out.print("Coup impossible réessayez : ");
-                move = scanner.nextLine();
-                x = move.charAt(1) - '1';
-                y = move.charAt(0) - 'A';
-                point = new Point(x, y);
-            }
+            try (Scanner scanner = new Scanner(System.in)) {
+                System.out.print("Entrer votre coup : ");
+                String move = scanner.nextLine();
+                while (move.length() < 2) {
+                    System.out.print("Coup impossible réessayez : ");
+                    move = scanner.nextLine();
+                }
+                int x = move.charAt(1) - '1';
+                int y = move.charAt(0) - 'A';
+                Point point = new Point(x, y);
+                while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
+                    System.out.print("Coup impossible réessayez : ");
+                    move = scanner.nextLine();
+                    x = move.charAt(1) - '1';
+                    y = move.charAt(0) - 'A';
+                    point = new Point(x, y);
+                }
 
-            board.move(point.x, point.y, color);
-
+                board.move(point.x, point.y, color);
+            }
             color = getOppositeColor(color);
             board.setPossibleMoves(color);
 
@@ -133,7 +133,7 @@ public class Actions {
             clearScreen();
         }
 
-        
+
         printBoard();
         printScore();
         System.out.println("Fin de la partie");
