@@ -17,5 +17,12 @@ We made this project for our third semester.
 - [x] Implémenter le plateau de jeu
 - [X] Implémenter les algorithmes de logique de jeu
 - [ ] Implémenter l'algorithme de l'IA
-- [ ] Implémenter l'interface graphique
+- [x] Implémenter l'interface graphique
+
+
+consigne :
+un fichier README.txt donnant un compte rendu honnête et fiable, en 10
+à 20 lignes, de votre niveau d’avancement par rapport au travail demandé
+et des principales difficultés rencontrées 
+
 
