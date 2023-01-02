@@ -14,8 +14,13 @@ We are 2 students from UPEC (Paris-Est Créteil University)
 We made this project for our third semester.
 
 ## Todo list : 
-- [x] Implémenter le plateau de jeu
+- [X] Implémenter le plateau de jeu
 - [X] Implémenter les algorithmes de logique de jeu
 - [ ] Implémenter l'algorithme de l'IA
 - [ ] Implémenter l'interface graphique
+
+
+## Compte rendu :
+Le jeu est fonctionel mais l'IA n'est pas encore implémentée.
+
 

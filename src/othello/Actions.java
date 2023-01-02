@@ -7,10 +7,17 @@ import java.util.Scanner;
 public class Actions {
     private final Board board;
 
+    /**
+     * Constructeur de la classe Actions
+     * @param board le plateau de jeu
+     */
     public Actions(Board board) {
         this.board = board;
     }
 
+    /**
+     * Affiche le plateau de jeu
+     */
     public void printBoard() {
         String ANSI_RESET = "\u001B[0m";
         String ANSI_BLACK = "\u001B[30m";
@@ -52,6 +59,9 @@ public class Actions {
         System.out.println("    " + ANSI_RESET);
     }
 
+    /**
+     * Efface la Console
+     */
     public void clearScreen() { // ne fonctionne pas sur un IDE
         try {
             final String os = System.getProperty("os.name");
@@ -62,6 +72,9 @@ public class Actions {
         }
     }
 
+    /**
+     * Affiche le score
+     */
     private void printScore() {
         int black = 0;
         int white = 0;
@@ -74,6 +87,11 @@ public class Actions {
         System.out.println("Score: " + black + "(N) - " + white + "(B)");
     }
 
+    /**
+     * Donne le joueur opposé
+     * @param player le joueur actuel
+     * @return le joueur opposé
+     */
     private Color getOppositeColor(Color player) {
         if (player == Color.BLACK) {
             return Color.WHITE;
@@ -84,11 +102,11 @@ public class Actions {
         }
     }
 
+    /**
+     * Joue une partie 1V1
+     * @param color le joueur qui commence
+     */
     public void play(Color color) {
-        play(color, false);
-    }
-
-    private void play(Color color, boolean loop) {
         board.setPossibleMoves(color);
         while (board.getMoves().size() > 0) {
             ArrayList<Point> possibleMoves = board.getMoves();
@@ -99,26 +117,26 @@ public class Actions {
 
             printBoard();
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Entrer votre coup : ");
-            String move = scanner.nextLine();
-            while (move.length() < 2) {
-                System.out.print("Coup impossible réessayez : ");
-                move = scanner.nextLine();
-            }
-            int x = move.charAt(1) - '1';
-            int y = move.charAt(0) - 'A';
-            Point point = new Point(x, y);
-            while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
-                System.out.print("Coup impossible réessayez : ");
-                move = scanner.nextLine();
-                x = move.charAt(1) - '1';
-                y = move.charAt(0) - 'A';
-                point = new Point(x, y);
-            }
+            try (Scanner scanner = new Scanner(System.in)) {
+                System.out.print("Entrer votre coup : ");
+                String move = scanner.nextLine();
+                while (move.length() < 2) {
+                    System.out.print("Coup impossible réessayez : ");
+                    move = scanner.nextLine();
+                }
+                int x = move.charAt(1) - '1';
+                int y = move.charAt(0) - 'A';
+                Point point = new Point(x, y);
+                while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
+                    System.out.print("Coup impossible réessayez : ");
+                    move = scanner.nextLine();
+                    x = move.charAt(1) - '1';
+                    y = move.charAt(0) - 'A';
+                    point = new Point(x, y);
+                }
 
-            board.move(point.x, point.y, color);
-
+                board.move(point.x, point.y, color);
+            }
             color = getOppositeColor(color);
             board.setPossibleMoves(color);
 
@@ -132,6 +150,8 @@ public class Actions {
 
             clearScreen();
         }
+
+
         printBoard();
         printScore();
         System.out.println("Fin de la partie");

@@ -6,14 +6,24 @@ import java.util.ArrayList;
 public class Board {
     private final int SIZE;
     private Color[][] board;
-    private int numberOfMoves;
+    private int numberOfMoves; // Nombre de coups joués
 
+    /**
+     * Constructeur de copie la classe Board
+     * @param board le plateau de jeu
+     * @param numberOFMoves le nombre de coups joués
+     * @param SIZE la taille du plateau de jeu
+     */
     public Board(Color[][] board, int numberOFMoves, int SIZE) {
         this.SIZE = SIZE;
         this.board = board;
         this.numberOfMoves = numberOFMoves;
     }
 
+    /**
+     * Constructeur de copie de la classe Board
+     * @param board le plateau de jeu
+     */
     public Board(Board board) {
         this.SIZE = board.getSize();
         this.board = new Color[SIZE][SIZE];
@@ -28,6 +38,10 @@ public class Board {
         this.numberOfMoves = board.numberOfMoves;
     }
 
+    /**
+     * Constructeur de la classe Board
+     * @param SIZE la taille du plateau de jeu
+     */
     public Board(int SIZE) {
         this.SIZE = SIZE;
         this.board = new Color[SIZE][SIZE];
@@ -44,27 +58,53 @@ public class Board {
 
     }
 
+    /**
+     * Retourne la taille du plateau de jeu
+     * @return la taille du plateau de jeu
+     */
     public int getSize() {
         return SIZE;
     }
 
+    /**
+     * Retourne le nombre de coups joués
+     * @return le nombre de coups joués
+     */
     public int getNumberOfMoves() {
         return numberOfMoves;
     }
 
+    /**
+     * Change le nombre de coups joués
+     * @param numberOfMoves le nouveau nombre de coups joués
+     */
     public void setNumberOfMoves(int numberOfMoves) {
         this.numberOfMoves = numberOfMoves;
     }
 
+    /**
+     * Retourne le plateau de jeu
+     * @return le plateau de jeu
+     */
     public Color[][] getBoard() {
         return board;
     }
 
+    /**
+     * Change le plateau de jeu
+     * @param board le nouveau plateau de jeu
+     */
     public void setBoard(Color[][] board) {
         this.board = board;
     }
 
 
+    /**
+     * Joue un coup
+     * @param r la ligne du coup
+     * @param c la colonne du coup
+     * @param player le joueur qui joue le coup
+     */
     public void move(int r, int c, Color player) {
         if (r < SIZE && r >= 0 && c < SIZE && c >= 0 && player != Color.EMPTY) {
             numberOfMoves++;
@@ -73,6 +113,12 @@ public class Board {
         }
     }
 
+    /**
+     * Retourne les cases qui peuvent être jouées
+     * @param r la ligne du coup
+     * @param c la colonne du coup
+     * @param color le joueur qui joue le coup
+     */
     private void flip(int r, int c, Color color) {
         int[] row = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] col = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -89,6 +135,10 @@ public class Board {
         }
     }
 
+    /**
+     * Met à jour le plateau de jeu avec les coups possibles
+     * @param color le joueur dont on veut les coups possibles
+     */
     public void setPossibleMoves(Color color) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -103,20 +153,25 @@ public class Board {
         }
     }
 
+    /**
+     * Retourne une liste des coups possibles
+     * @param player le joueur dont on veut les coups possibles
+     * @return une liste des coups possibles
+     */
     public ArrayList<Point> getPossibleMoves(Color player) {
         ArrayList<Point> list = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (board[i][j] == Color.EMPTY && isAdjacentOppositeColor(i, j, player)
                         || board[i][j] == Color.POSSIBLE_MOVE && isAdjacentOppositeColor(i, j, player)) { // si la case est vide et qu'il y a une case de la couleur adverse adjacente
-                    if(isPossibleMoveInDirection(i, j, player, -1, -1)
-                            || isPossibleMoveInDirection(i, j, player, -1, 0)
-                            || isPossibleMoveInDirection(i, j, player, -1, 1)
-                            || isPossibleMoveInDirection(i, j, player, 0, -1)
-                            || isPossibleMoveInDirection(i, j, player, 0, 1)
-                            || isPossibleMoveInDirection(i, j, player, 1, -1)
-                            || isPossibleMoveInDirection(i, j, player, 1, 0)
-                            || isPossibleMoveInDirection(i, j, player, 1, 1)) {
+                    if(isPossibleMoveInDirection(i, j, player, -1, 0) // haut
+                            || isPossibleMoveInDirection(i, j, player, 1, 0) // bas
+                            || isPossibleMoveInDirection(i, j, player, 0, -1) // gauche
+                            || isPossibleMoveInDirection(i, j, player, 0, 1) // droite
+                            || isPossibleMoveInDirection(i, j, player, -1, -1) // haut gauche
+                            || isPossibleMoveInDirection(i, j, player, -1, 1) // haut droite
+                            || isPossibleMoveInDirection(i, j, player, 1, -1) // bas gauche
+                            || isPossibleMoveInDirection(i, j, player, 1, 1)) { // bas droite
                         list.add(new Point(i, j));
                     }
                 }
@@ -125,6 +180,10 @@ public class Board {
         return list;
     }
 
+    /**
+     * Retourne une liste des coups possibles du plateau de jeu
+     * @return une liste des coups possibles du plateau de jeu
+     */
     public ArrayList<Point> getMoves() {
         ArrayList<Point> list = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
@@ -137,6 +196,11 @@ public class Board {
         return list;
     }
 
+    /**
+     * Donne le joueur opposé
+     * @param player le joueur actuel
+     * @return le joueur opposé
+     */
     private Color getOppositeColor(Color player) {
         if (player == Color.BLACK) {
             return Color.WHITE;
@@ -147,6 +211,13 @@ public class Board {
         }
     }
 
+    /**
+     * Retourne vrai si le pion joué est adjacent à une case de la couleur adverse
+     * @param i la ligne du pion
+     * @param j la colonne du pion
+     * @param player le joueur qui joue le pion
+     * @return vrai si le pion joué est adjacent à une case de la couleur adverse
+     */
     private boolean isAdjacentOppositeColor(int i, int j, Color player) {
         Color oppositeColor = getOppositeColor(player);
         return (i > 0 && board[i - 1][j] == oppositeColor) // haut
@@ -159,6 +230,15 @@ public class Board {
                 || (i < SIZE - 1 && j < SIZE - 1 && board[i + 1][j + 1] == oppositeColor); // bas droite
     }
 
+    /**
+     * Retourne vrai si le coup est possible dans la direction donnée
+     * @param i la ligne du coup
+     * @param j la colonne du coup
+     * @param player le joueur qui joue le coup
+     * @param r la direction de la ligne
+     * @param c la direction de la colonne
+     * @return vrai si le coup est possible dans la direction donnée
+     */
     private boolean isPossibleMoveInDirection(int i, int j, Color player, int r, int c) {
         int x = i + r;
         int y = j + c;
