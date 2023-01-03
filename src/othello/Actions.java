@@ -1,29 +1,36 @@
-package othello;//package du jeu
+package othello;
 
-import java.awt.*; //interface graphique
-import java.util.ArrayList;//tableau d objet où nous pouvons modifier la taille
-import java.util.Scanner;//permet à un l'utilisateur d'écrire du texte et au programme de lire ce texte
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Actions { // class Action où sont regroupées toutes les actions que les joueurs font pendant la partie
-    private final Board board;//création du tableu "Board" en private et de facon immuable
+public class Actions {
+    private final Board board;
 
-    public Actions(Board board) {//methode de classe
-        this.board = board;//instance de tableau ("Board")
+    /**
+     * Constructeur de la classe Actions
+     * @param board le plateau de jeu
+     */
+    public Actions(Board board) {
+        this.board = board;
     }
 
-    public void printBoard() {//methode qui affiche le tableau
+    /**
+     * Affiche le plateau de jeu
+     */
+    public void printBoard() {
         String ANSI_RESET = "\u001B[0m";
         String ANSI_BLACK = "\u001B[30m";
         String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-        System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + "  ");//affiche le tableau
-        for (int i = 0; i < board.getSize(); i++) {//boucle for qui rajoute 1 a chaque "taille" du tableau"
-            System.out.print("  " + (char) ('A' + i));//affiche l'abscisse et l ordonné du coup
+        System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + "  ");
+        for (int i = 0; i < board.getSize(); i++) {
+            System.out.print("  " + (char) ('A' + i));
         }
         System.out.println("    " + ANSI_RESET);
 
-        int count = 1; //compteur qui commence a 1
-        for (Color[] row : board.getBoard()) {// boucle for each
+        int count = 1;
+        for (Color[] row : board.getBoard()) {
             if (count < 10) System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + " " + count + "  ");
             else System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + count + "  ");
             for (Color color : row) {
@@ -52,6 +59,9 @@ public class Actions { // class Action où sont regroupées toutes les actions q
         System.out.println("    " + ANSI_RESET);
     }
 
+    /**
+     * Efface la Console
+     */
     public void clearScreen() { // ne fonctionne pas sur un IDE
         try {
             final String os = System.getProperty("os.name");
@@ -62,19 +72,27 @@ public class Actions { // class Action où sont regroupées toutes les actions q
         }
     }
 
-    private void printScore() {//methode qui affcihe le score de  la partie 
-        int black = 0;//en debut de partie, chaque joueur a  point
+    /**
+     * Affiche le score
+     */
+    private void printScore() {
+        int black = 0;
         int white = 0;
-        for (Color[] row : board.getBoard()) {//boucle for each qui regarde toute les row dans le tableu(getter)
-            for (Color color : row) {//boucle qui regarde la couleur de la rangée
-                if (color == Color.BLACK) black++; // si c est noir alors noir++
-                else if (color == Color.WHITE) white++;//sinon blanc ++
+        for (Color[] row : board.getBoard()) {
+            for (Color color : row) {
+                if (color == Color.BLACK) black++;
+                else if (color == Color.WHITE) white++;
             }
         }
-        System.out.println("Score: " + black + "(N) - " + white + "(B)"); //affiche le score
+        System.out.println("Score: " + black + "(N) - " + white + "(B)");
     }
 
-    private Color getOppositeColor(Color player) {//methode qui prends la couleur oppose
+    /**
+     * Donne le joueur opposé
+     * @param player le joueur actuel
+     * @return le joueur opposé
+     */
+    private Color getOppositeColor(Color player) {
         if (player == Color.BLACK) {
             return Color.WHITE;
         } else if (player == Color.WHITE) {
@@ -84,11 +102,11 @@ public class Actions { // class Action où sont regroupées toutes les actions q
         }
     }
 
+    /**
+     * Joue une partie 1V1
+     * @param color le joueur qui commence
+     */
     public void play(Color color) {
-        play(color, false);
-    }
-
-    private void play(Color color, boolean loop) {
         board.setPossibleMoves(color);
         while (board.getMoves().size() > 0) {
             ArrayList<Point> possibleMoves = board.getMoves();
