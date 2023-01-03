@@ -180,6 +180,12 @@ public class Actions {
         System.out.println("Fin de la partie");
 
     }
+
+   
+/**
+ * @param meillerurCoup dis le meilleur coup
+ * @param color la couleur du joueur
+ */
 public void meilleurCoup(Color color) {
         ArrayList<Point> possibleMoves = board.getMoves();
         int max = 0;
@@ -194,9 +200,19 @@ public void meilleurCoup(Color color) {
         board.move(bestMove.x, bestMove.y, color);
     }
 
+    /**
+     * Joue une partie contre l'IA
+     *
+     * @param color le joueur qui commence
+     */
     public void playIA(Color color) {
         //TODO: Jouer contre l'IA
     }
+
+    /**
+     * Sauvegarde la partie
+     * @param fileName le nom du fichier
+     */
     private void save(String fileName) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName + ".bin"));

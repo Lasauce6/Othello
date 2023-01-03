@@ -220,6 +220,13 @@ public class Board implements Serializable {
         return board[x][y] == player;
     }
 
+    /**
+     * Retourne le nombre de pions retournés par le coup
+     * @param x la ligne du coup
+     * @param y la colonne du coup
+     * @param color la couleur du coup
+     * @return le nombre de pions retournés par le coup
+     */
     public int getNbFlipped(int x, int y, Color color) {
         int nbFlipped = 0;
         if (isPossibleMoveInDirection(x, y, color, -1, 0)) { // haut
