@@ -219,4 +219,73 @@ public class Board implements Serializable {
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return false;
         return board[x][y] == player;
     }
+
+    public int getNbFlipped(int x, int y, Color color) {
+        int nbFlipped = 0;
+        if (isPossibleMoveInDirection(x, y, color, -1, 0)) { // haut
+            int i = x - 1;
+            while (board[i][y] == getOppositeColor(color)) {
+                nbFlipped++;
+                i--;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, 1, 0)) { // bas
+            int i = x + 1;
+            while (board[i][y] == getOppositeColor(color)) {
+                nbFlipped++;
+                i++;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, 0, -1)) { // gauche
+            int j = y - 1;
+            while (board[x][j] == getOppositeColor(color)) {
+                nbFlipped++;
+                j--;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, 0, 1)) { // droite
+            int j = y + 1;
+            while (board[x][j] == getOppositeColor(color)) {
+                nbFlipped++;
+                j++;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, -1, -1)) { // haut gauche
+            int i = x - 1;
+            int j = y - 1;
+            while (board[i][j] == getOppositeColor(color)) {
+                nbFlipped++;
+                i--;
+                j--;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, -1, 1)) { // haut droite
+            int i = x - 1;
+            int j = y + 1;
+            while (board[i][j] == getOppositeColor(color)) {
+                nbFlipped++;
+                i--;
+                j++;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, 1, -1)) { // bas gauche
+            int i = x + 1;
+            int j = y - 1;
+            while (board[i][j] == getOppositeColor(color)) {
+                nbFlipped++;
+                i++;
+                j--;
+            }
+        }
+        if (isPossibleMoveInDirection(x, y, color, 1, 1)) { // bas droite
+            int i = x + 1;
+            int j = y + 1;
+            while (board[i][j] == getOppositeColor(color)) {
+                nbFlipped++;
+                i++;
+                j++;
+            }
+        }
+        return nbFlipped;
+    }
 }

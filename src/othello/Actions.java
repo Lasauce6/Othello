@@ -62,7 +62,7 @@ public class Actions {
         }
         System.out.println("    " + ANSI_RESET);
     }
-
+   
     /**
      * Efface la Console
      */
@@ -105,7 +105,7 @@ public class Actions {
             return Color.EMPTY;
         }
     }
-
+    
     /**
      * Joue une partie 1V1
      *
@@ -180,7 +180,19 @@ public class Actions {
         System.out.println("Fin de la partie");
 
     }
-
+public void meilleurCoup(Color color) {
+        ArrayList<Point> possibleMoves = board.getMoves();
+        int max = 0;
+        Point bestMove = null;
+        for (Point point : possibleMoves) {
+            int nb = board.getNbFlipped(point.x, point.y, color);
+            if (nb > max) {
+                max = nb;
+                bestMove = point;
+            }
+        }
+        board.move(bestMove.x, bestMove.y, color);
+    }
 
     public void playIA(Color color) {
         //TODO: Jouer contre l'IA
