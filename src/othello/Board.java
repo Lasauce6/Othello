@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class Board implements Serializable {
     private Color currentPlayer;
-    private int SIZE;
-    private Color[][] board;
+    private final int SIZE;
+    private final Color[][] board;
     private int numberOfMoves; // Nombre de coups joués
 
     /**
