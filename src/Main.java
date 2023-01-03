@@ -25,7 +25,7 @@ public class Main {
             try {
                 choice = scanner.nextInt();
             } catch (Exception e) {
-                System.out.println("Erreur : Veuillez entrer un nombre");
+                System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 3 inclus");
                 scanner.next();
             }
             switch (choice) { // TODO: ajouter un menu pour l'IA
@@ -43,7 +43,7 @@ public class Main {
                         actions1.play(player == 1 ? Color.BLACK : Color.WHITE);
                         choice = 0;
                     } catch (Exception e) {
-                        System.out.println("Erreur : Veuillez entrer un nombre");
+                        System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 3 inclus");
                         scanner.next();
                     }
                 }
@@ -60,7 +60,7 @@ public class Main {
                         if (board2 != null) actions2.play(board2.getCurrentPlayer());
                         else System.out.println("Erreur : Impossible de charger la partie");
                     } catch (Exception e) {
-                        System.out.println("Erreur : Fichier introuvable");
+                        System.out.println("Erreur : Fichier introuvable ou inexistant");
                         choice = 0;
                         break;
                     }
