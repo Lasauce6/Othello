@@ -185,5 +185,12 @@ public class Actions {
     public void playIA(Color color) {
         //TODO: Jouer contre l'IA
     }
-
+    private void save(String fileName) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName + ".bin"));
+            oos.writeObject(board);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
