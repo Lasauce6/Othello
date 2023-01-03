@@ -47,5 +47,18 @@ public class arbre{
             afficher(n.getDroite());
         }
     }
+
+
+    /**
+     * arbre de recherche
+     */
+    public void arbrederecherche(racine, int val){
+        Noeud n = abrederecherche(racine,val);
+        if(n!=null){
+            System.out.println("valeur trouvée");
+        }else{
+            System.out.println("valeur non trouvée");
+        }
+    }
 }
 
