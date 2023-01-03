@@ -16,14 +16,14 @@ public class arbre{
     public void ajouter(int val){
 
         Noeud n = new Noeud();
-        Noeud courant=racine;
+        Noeud crt=racine;
         Noeud pere=null;
-        while(courant!=null){
-            pere=courant;
+        while(crt!=null){
+            pere=crt;
             if(val<racine.getVal()){
-                courant=courant.getGauche();
+                crt=crt.getGauche();
             }else{
-                courant=courant.getDroite();
+                crt=crt.getDroite();
             }
         }
         if(val<pere.getVal()){
