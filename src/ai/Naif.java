@@ -67,4 +67,5 @@ public class Naif {
     private Point getBestMoveLevel2() {
         return null; // TODO: a faire avec un arbre de recherche
     }
+
 }
