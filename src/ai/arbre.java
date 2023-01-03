@@ -3,14 +3,16 @@ package ai;
 public class arbre{
     private final Noeud racine;
  
+    /**
+     * @param racine
+     */
     public arbre(Noeud racine) {
         this.racine = racine;
     }
 
-    public arbre(int val){
-        racine=new Noeud();
-                         }
-
+    /**
+     * @param val
+     */
     public void ajouter(int val){
 
         Noeud n = new Noeud();
