@@ -1,7 +1,9 @@
 import othello.Actions;
 import othello.Board;
-import othello.Color;
 
+/**
+ * Classe Main
+ */
 public class Main {
 
     /**
@@ -10,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         Board board = new Board(8);
         Actions actions = new Actions(board);
-        actions.play(Color.BLACK);
+        actions.play(board.getCurrentPlayer());
     }
 
 }

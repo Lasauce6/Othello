@@ -1,11 +1,15 @@
 package othello;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Classe Actions
+ */
 public class Actions {
-    private final Board board;
+    private Board board;
 
     /**
      * Constructeur de la classe Actions
@@ -62,7 +66,7 @@ public class Actions {
     /**
      * Efface la Console
      */
-    public void clearScreen() { // ne fonctionne pas sur un IDE
+    public void clearScreen() { // Ne fonctionne pas sur un IDE
         try {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) Runtime.getRuntime().exec("cls");
@@ -104,6 +108,7 @@ public class Actions {
 
     /**
      * Joue une partie 1V1
+     *
      * @param color le joueur qui commence
      */
     public void play(Color color) {
@@ -117,26 +122,54 @@ public class Actions {
 
             printBoard();
 
-            try (Scanner scanner = new Scanner(System.in)) {
-                System.out.print("Entrer votre coup : ");
-                String move = scanner.nextLine();
-                while (move.length() < 2) {
-                    System.out.print("Coup impossible réessayez : ");
-                    move = scanner.nextLine();
-                }
-                int x = move.charAt(1) - '1';
-                int y = move.charAt(0) - 'A';
-                Point point = new Point(x, y);
-                while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
-                    System.out.print("Coup impossible réessayez : ");
-                    move = scanner.nextLine();
-                    x = move.charAt(1) - '1';
-                    y = move.charAt(0) - 'A';
-                    point = new Point(x, y);
-                }
-
-                board.move(point.x, point.y, color);
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Entrer votre coup (ou exit/load/save) : ");
+            String move = scanner.nextLine();
+            while (move.length() < 2) {
+                System.out.print("Coup impossible réessayez : ");
+                move = scanner.nextLine();
             }
+            int x = move.charAt(1) - '1';
+            int y = move.charAt(0) - 'A';
+            Point point = new Point(x, y);
+            while (move.length() != 2 || x < 0 || x >= board.getSize() || y < 0 || y >= board.getSize() || !possibleMoves.contains(point)) {
+                switch (move) {
+                    case "exit" -> System.exit(0); // Quitte le jeu
+                    case "save" -> { // Sauvegarde la partie
+                        System.out.print("Entrer le nom du fichier : ");
+                        String fileName = scanner.nextLine(); // On demande le nom du fichier
+                        System.out.println("Sauvegarde en cours...");
+                        save(fileName); // On sauvegarde la partie
+                        System.out.println("Sauvegarde terminée");
+                        move = "next";
+                    }
+                    case "load" -> { // Charge une partie
+                        System.out.print("Entrer le nom du fichier : ");
+                        String fileName = scanner.nextLine(); // On demande le nom du fichier
+                        System.out.println("Chargement en cours...");
+                        load(fileName); // On charge le fichier
+                        System.out.println("Chargement terminé");
+                        clearScreen();
+                        color = board.getCurrentPlayer(); // On récupère le joueur actuel
+                        board.setPossibleMoves(color); // On met à jour les coups possibles
+                        possibleMoves = board.getMoves(); // On récupère les coups possibles
+                        if (color == Color.BLACK) System.out.println("Tour du joueur noir"); // On affiche le joueur actuel
+                        else System.out.println("Tour du joueur blanc");
+                        printBoard(); // On affiche le plateau
+                        move = "next";
+                    }
+                    default -> { // Si le coup n'est pas valide
+                        System.out.print("Coup impossible réessayez : ");
+                        move = scanner.nextLine();
+                        x = move.charAt(1) - '1';
+                        y = move.charAt(0) - 'A';
+                        point = new Point(x, y);
+                    }
+                }
+            }
+
+            board.move(point.x, point.y, color);
+
             color = getOppositeColor(color);
             board.setPossibleMoves(color);
 
@@ -150,11 +183,32 @@ public class Actions {
 
             clearScreen();
         }
-
-
         printBoard();
         printScore();
         System.out.println("Fin de la partie");
 
+    }
+
+
+    public void playIA(Color color) {
+        //TODO: Jouer contre l'IA
+    }
+
+    private void save(String fileName) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName + ".bin"));
+            oos.writeObject(board);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void load(String fileName) {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName + ".bin"));
+            board = (Board) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

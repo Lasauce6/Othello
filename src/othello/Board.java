@@ -1,42 +1,17 @@
 package othello;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
-    private final int SIZE;
+/**
+ * Classe Board
+ */
+public class Board implements Serializable {
+    private Color currentPlayer;
+    private int SIZE;
     private Color[][] board;
     private int numberOfMoves; // Nombre de coups joués
-
-    /**
-     * Constructeur de copie la classe Board
-     * @param board le plateau de jeu
-     * @param numberOFMoves le nombre de coups joués
-     * @param SIZE la taille du plateau de jeu
-     */
-    public Board(Color[][] board, int numberOFMoves, int SIZE) {
-        this.SIZE = SIZE;
-        this.board = board;
-        this.numberOfMoves = numberOFMoves;
-    }
-
-    /**
-     * Constructeur de copie de la classe Board
-     * @param board le plateau de jeu
-     */
-    public Board(Board board) {
-        this.SIZE = board.getSize();
-        this.board = new Color[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                this.board[i][j] = board.getBoard()[i][j];
-            }
-        }
-        for (int i = 0; i < SIZE; i++) {
-            System.arraycopy(board.board[i], 0, this.board[i], 0, SIZE);
-        }
-        this.numberOfMoves = board.numberOfMoves;
-    }
 
     /**
      * Constructeur de la classe Board
@@ -55,7 +30,7 @@ public class Board {
         board[SIZE / 2][(SIZE / 2) - 1] = Color.BLACK;
         board[SIZE / 2][SIZE / 2] = Color.WHITE;
         this.numberOfMoves = 4;
-
+        this.currentPlayer = Color.BLACK;
     }
 
     /**
@@ -75,14 +50,6 @@ public class Board {
     }
 
     /**
-     * Change le nombre de coups joués
-     * @param numberOfMoves le nouveau nombre de coups joués
-     */
-    public void setNumberOfMoves(int numberOfMoves) {
-        this.numberOfMoves = numberOfMoves;
-    }
-
-    /**
      * Retourne le plateau de jeu
      * @return le plateau de jeu
      */
@@ -91,13 +58,12 @@ public class Board {
     }
 
     /**
-     * Change le plateau de jeu
-     * @param board le nouveau plateau de jeu
+     * Retourne le joueur courant
+     * @return le joueur courant
      */
-    public void setBoard(Color[][] board) {
-        this.board = board;
+    public Color getCurrentPlayer() {
+        return currentPlayer;
     }
-
 
     /**
      * Joue un coup
@@ -110,6 +76,7 @@ public class Board {
             numberOfMoves++;
             board[r][c] = player;
             flip(r, c, player);
+            currentPlayer = (currentPlayer == Color.BLACK) ? Color.WHITE : Color.BLACK;
         }
     }
 

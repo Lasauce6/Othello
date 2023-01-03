@@ -16,8 +16,11 @@ We made this project for our third semester.
 ## Todo list : 
 - [X] Implémenter le plateau de jeu
 - [X] Implémenter les algorithmes de logique de jeu
-- [ ] Implémenter l'algorithme de l'IA
-- [ ] Implémenter l'interface graphique
+- [ ] Pouvoir sauvegarder/charger une partie
+- [ ] Saisie de coups avec un choix z q s d et entrée
+- [ ] IA naïve
+- [ ] IA MiniMax (2 niveaux : profondeur donnée et alpha-beta)
+- [ ] Implémenter l'interface graphique (bonus)
 
 
 ## Compte rendu :
