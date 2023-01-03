@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 /**
  * Classe Actions
+ * @author Othello
  */
 public class Actions {
     private final Board board;

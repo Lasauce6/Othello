@@ -39,6 +39,7 @@ public class arbre{
 
     /**
      * @param n
+     * @param val
      */
     private void afficher(Noeud n){
         if(n!=null){

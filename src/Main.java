@@ -8,6 +8,16 @@ import java.util.Scanner;
 
 /**
  * Classe Main
+ * @author Othello
+ * @version 1.0
+ * @since 1.0
+ * @see othello.Actions
+ * @see othello.Board
+ * @see othello.Color
+ * @see java.io.FileInputStream
+ * @see java.io.ObjectInputStream
+ * @see java.util.Scanner
+ * @see java.lang.Exception
  */
 public class Main {
 
@@ -22,32 +32,53 @@ public class Main {
             System.out.println("2. Charger une partie");
             System.out.println("3. Quitter");
             System.out.print("Choix : ");
+            
             try {
+    
                 choice = scanner.nextInt();
-            } catch (Exception e) {
+
+            } 
+            
+            catch (Exception e) {
                 System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 3 inclus");
                 scanner.next();
+
             }
             switch (choice) { // TODO: ajouter un menu pour l'IA
                 case 1 -> {
-                    System.out.print("Taille du plateau : ");
+                    System.out.println("Choix de la taille du plateau :");
                     try {
+                        //System.out.println("1. 6x6");
+
                         int size = scanner.nextInt();
+
                         Board board1 = new Board(size);
+
                         Actions actions1 = new Actions(board1);
+
                         System.out.println("Choix du premier joueur :");
+
                         System.out.println("1. Noir");
+
                         System.out.println("2. Blanc");
+
                         System.out.print("Choix : ");
+
                         int player = scanner.nextInt();
+
                         actions1.play(player == 1 ? Color.BLACK : Color.WHITE);
+
                         choice = 0;
-                    } catch (Exception e) {
+
+                    } 
+                    catch (Exception e) {
                         System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 3 inclus");
                         scanner.next();
+
                     }
                 }
                 case 2 -> {
+
                     System.out.print("Entrer le nom du fichier : ");
                     Scanner scanner2 = new Scanner(System.in);
                     String fileName = scanner2.nextLine(); // On demande le nom du fichier
@@ -72,3 +103,4 @@ public class Main {
         }
     }
 }
+
