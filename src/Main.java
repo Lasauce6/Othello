@@ -14,5 +14,4 @@ public class Main {
         Actions actions = new Actions(board);
         actions.play(board.getCurrentPlayer());
     }
-
 }
