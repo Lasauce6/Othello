@@ -22,8 +22,6 @@ public class Actions {
 
     /**
      * Affiche le plateau de jeu
-     * @param board le plateau de jeu
-     * @param player le joueur actuel
      */
     public void printBoard() {
         String ANSI_RESET = "\u001B[0m";
@@ -68,11 +66,6 @@ public class Actions {
    
     /**
      * Efface la Console
-     * @param os le système d'exploitation
-     * @param e l'exception
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws Exception
      */
     public void clearScreen() { // Ne fonctionne pas sur un IDE
         try {
@@ -86,23 +79,6 @@ public class Actions {
 
     /**
      * Affiche le score
-     * @param black le nombre de pions noirs
-     * @param white le nombre de pions blancs
-     * @param player le joueur actuel
-     * @param stop si la partie est terminée
-     * @param possibleMoves les coups possibles
-     * @param board le plateau de jeu
-     * @param fileName le nom du fichier
-     * @param save si la partie est sauvegardée
-     * @param load si la partie est chargée
-     * @param saveFileName le nom du fichier de sauvegarde
-     * @param loadFileName le nom du fichier de chargement
-     * @param savePlayer le joueur actuel
-     * @param saveBlack le nombre de pions noirs
-     * @param saveWhite le nombre de pions blancs
-     * @param saveBoard le plateau de jeu
-     * @param savePossibleMoves les coups possibles
-     * @param saveStop si la partie est terminée
      */
     private void printScore() {
         int black = 0;
@@ -130,13 +106,11 @@ public class Actions {
             return Color.EMPTY;
         }
     }
-    
+
+
     /**
-     * Sauvegarde la partie
-     * @param fileName le nom du fichier
-     * @param player le joueur actuel
-     * @param black le nombre de pions noirs
-     * @param white le nombre de pions blancs
+     * Lance une partie de 1v1
+     * @param color le joueur qui commence
      */
     public void play(Color color) {
         board.setPossibleMoves(color);
@@ -208,28 +182,27 @@ public class Actions {
 
     }
 
-   
-/**
- * @param meillerurCoup dis le meilleur coup
- * @param color la couleur du joueur
- */
-public void meilleurCoup(Color color) {
-        ArrayList<Point> possibleMoves = board.getMoves();
-        int max = 0;
-        Point bestMove = null;
-        for (Point point : possibleMoves) {
-            int nb = board.getNbFlipped(point.x, point.y, color);
-            if (nb > max) {
-                max = nb;
-                bestMove = point;
+
+    /**
+     * Joue le meilleur coup possible
+     * @param color le joueur qui joue
+     */
+    public void meilleurCoup(Color color) {
+            ArrayList<Point> possibleMoves = board.getPossibleMoves(color);
+            int max = 0;
+            Point bestMove = null;
+            for (Point point : possibleMoves) {
+                int nb = board.getNbFlip(point.x, point.y, color);
+                if (nb > max) {
+                    max = nb;
+                    bestMove = point;
+                }
             }
-        }
-        board.move(bestMove.x, bestMove.y, color);
+            board.move(bestMove.x, bestMove.y, color);
     }
 
     /**
      * Joue une partie contre l'IA
-     *
      * @param color le joueur qui commence
      */
     public void playIA(Color color) {
