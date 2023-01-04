@@ -7,10 +7,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Classe Naif
+ */
 public class Naif {
-    private final Board board;
-    private final Color color;
-    private final int level;
+    private final Board board; // Le plateau de jeu
+    private final Color color; // La couleur du joueur
+    private final int level; // Le niveau de l'IA
 
     /**
      * Constructeur de la classe Naif

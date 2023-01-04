@@ -1,5 +1,7 @@
 package othello;
 
+import ai.Naif;
+
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -7,10 +9,9 @@ import java.util.Scanner;
 
 /**
  * Classe Actions
- * @author Othello
  */
 public class Actions {
-    private final Board board;
+    private final Board board; // Le plateau de jeu
 
     /**
      * Constructeur de la classe Actions
@@ -93,22 +94,6 @@ public class Actions {
     }
 
     /**
-     * Donne le joueur opposé
-     * @param player le joueur actuel
-     * @return le joueur opposé
-     */
-    private Color getOppositeColor(Color player) {
-        if (player == Color.BLACK) {
-            return Color.WHITE;
-        } else if (player == Color.WHITE) {
-            return Color.BLACK;
-        } else {
-            return Color.EMPTY;
-        }
-    }
-
-
-    /**
      * Lance une partie de 1v1
      * @param color le joueur qui commence
      */
@@ -146,7 +131,7 @@ public class Actions {
                         System.out.println("Sauvegarde en cours...");
                         save(fileName); // On sauvegarde la partie
                         System.out.println("Sauvegarde terminée");
-                        move = "next";
+                        stop = true;
                     }
                     default -> { // Si le coup n'est pas valide
                         System.out.print("Coup impossible réessayez : ");
@@ -163,21 +148,23 @@ public class Actions {
 
             board.move(point.x, point.y, color);
 
-            color = getOppositeColor(color);
+            color = color.getOpponent();
             board.setPossibleMoves(color);
 
             if (board.getPossibleMoves(Color.WHITE).size() == 0 && board.getPossibleMoves(Color.BLACK).size() == 0) break;
             else if (board.getMoves().size() == 0) {
+                clearScreen();
                 if (color == Color.BLACK) System.out.println("Aucun coup possible pour le joueur noir");
                 else System.out.println("Aucun coup possible pour le joueur blanc");
-                color = getOppositeColor(color);
+                color = color.getOpponent();
                 board.setPossibleMoves(color);
-            }
-
-            clearScreen();
+            } else clearScreen();
         }
-        printBoard();
-        printScore();
+        if (!stop) {
+            clearScreen();
+            printBoard();
+            printScore();
+        }
         System.out.println("Fin de la partie");
 
     }
@@ -188,26 +175,29 @@ public class Actions {
      * @param color le joueur qui joue
      */
     public void meilleurCoup(Color color) {
-            ArrayList<Point> possibleMoves = board.getPossibleMoves(color);
-            int max = 0;
-            Point bestMove = null;
-            for (Point point : possibleMoves) {
-                int nb = board.getNbFlip(point.x, point.y, color);
-                if (nb > max) {
-                    max = nb;
-                    bestMove = point;
-                }
+        ArrayList<Point> possibleMoves = board.getPossibleMoves(color);
+        int max = 0;
+        Point bestMove = null;
+        for (Point point : possibleMoves) {
+            int nb = board.getNbFlip(point.x, point.y, color);
+            if (nb > max) {
+                max = nb;
+                bestMove = point;
             }
-            board.move(bestMove.x, bestMove.y, color);
+        }
+        board.move(bestMove.x, bestMove.y, color);
     }
 
     /**
-     * Joue une partie contre l'IA
+     * Joue une partie contre l'IA naive
      * @param color le joueur qui commence
      */
-    public void playIA(Color color) {
-        
-        //TODO: Jouer contre l'IA
+    public void playIA(Color color, int level) {
+        Naif ia = null;
+        if (level == 1) ia = new Naif(1, color.getOpponent(), board);
+        else ia = new Naif(2, color.getOpponent(), board);
+
+        // TODO: faire la fonction
     }
 
     /**
@@ -222,65 +212,4 @@ public class Actions {
             e.printStackTrace();
         }
     }
-
-
-
-    /**
-     *test de "minmax"
-     * @param color
-     * @param prof
-     
-    public void minmax (Color color, int prof) {
-        if (prof == 0) {
-            return;
-        }
-        ArrayList<Point> possibleMoves = board.getPossibleMoves(color);
-        int max = 0;
-        Point bestMove = null;
-        for (Point point : possibleMoves) {
-            int nb = board.getNbFlip(point.x, point.y, color);
-            if (nb > max) {
-                max = nb;
-                bestMove = point;
-            }
-        }
-        board.move(bestMove.x, bestMove.y, color);
-        minmax(getOppositeColor(color), prof - 1);
-    }
-        if (prof == 0) {
-            return;
-        }
-        ArrayList<Point> possibleMoves = board.getPossibleMoves(Color.BLACK);
-        int max = 0;
-        Point bestMove = null;
-        for (Point point : possibleMoves) {
-            int nb = board.getNbFlip(point.x, point.y, Color.BLACK);
-            if (nb > max) {
-                max = nb;
-                bestMove = point;
-            }
-        }
-        board.move(bestMove.x, bestMove.y, color);
-        minmax(getOppositeColor(color), prof - 1);
-    }
-
-
-    /**
-     *test de "minmax"
-     * @param color
-     * @param prof
-    public void clavierzqsd() {
-        Scanner scanner = new Scanner(System.in);
-        String touche = scanner.nextLine();
-        switch (touche) {
-            case "z" -> System.out.println("haut");
-            case "q" -> System.out.println("gauche");
-            case "s" -> System.out.println("bas");
-            case "d" -> System.out.println("droite");
-            default -> System.out.println("touche invalide");
-        }
-    }
-
-
-    */
 }

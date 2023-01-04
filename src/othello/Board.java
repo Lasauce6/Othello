@@ -12,8 +12,24 @@ public class Board implements Serializable {
     private final int SIZE; // La taille du plateau de jeu
     private final Color[][] board; // Le plateau de jeu
     private int numberOfMoves; // Nombre de coups joués
+    private Point lastMove; // Le dernier coup joué
 
-
+    /**
+     * Constructeur de copie de la classe Board
+     * @param board le plateau de jeu à copier
+     */
+    public Board(Board board) {
+        this.SIZE = board.getSize();
+        this.board = new Color[SIZE][SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                this.board[i][j] = board.getBoard()[i][j];
+            }
+        }
+        this.numberOfMoves = board.getNumberOfMoves();
+        this.currentPlayer = board.getCurrentPlayer();
+        this.lastMove = board.getLastMove();
+    }
 
     /**
      * Constructeur de la classe Board
@@ -32,7 +48,8 @@ public class Board implements Serializable {
         board[SIZE / 2][(SIZE / 2) - 1] = Color.BLACK;
         board[SIZE / 2][SIZE / 2] = Color.WHITE;
         this.numberOfMoves = 4;
-        this.currentPlayer = Color.BLACK;
+        this.currentPlayer = null;
+        this.lastMove = null;
     }
 
     /**
@@ -68,6 +85,30 @@ public class Board implements Serializable {
     }
 
     /**
+     * Change le joueur courant
+     * @param currentPlayer le nouveau joueur courant
+     */
+    public void setCurrentPlayer(Color currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    /**
+     * Retourne le dernier coup joué
+     * @return le dernier coup joué
+     */
+    public Point getLastMove() {
+        return lastMove;
+    }
+
+    /**
+     * Change le dernier coup joué
+     * @param lastMove le nouveau dernier coup joué
+     */
+    public void setLastMove(Point lastMove) {
+        this.lastMove = lastMove;
+    }
+
+    /**
      * Joue un coup
      * @param r la ligne du coup
      * @param c la colonne du coup
@@ -75,6 +116,7 @@ public class Board implements Serializable {
      */
     public void move(int r, int c, Color player) {
         if (r < SIZE && r >= 0 && c < SIZE && c >= 0 && player != Color.EMPTY) {
+            lastMove = new Point(r, c);
             numberOfMoves++;
             board[r][c] = player;
             flip(r, c, player);
@@ -166,21 +208,6 @@ public class Board implements Serializable {
     }
 
     /**
-     * Donne le joueur opposé
-     * @param player le joueur actuel
-     * @return le joueur opposé
-     */
-    private Color getOppositeColor(Color player) {
-        if (player == Color.BLACK) {
-            return Color.WHITE;
-        } else if (player == Color.WHITE) {
-            return Color.BLACK;
-        } else {
-            return Color.EMPTY;
-        }
-    }
-
-    /**
      * Retourne vrai si le pion joué est adjacent à une case de la couleur adverse
      * @param i la ligne du pion
      * @param j la colonne du pion
@@ -188,7 +215,7 @@ public class Board implements Serializable {
      * @return vrai si le pion joué est adjacent à une case de la couleur adverse
      */
     private boolean isAdjacentOppositeColor(int i, int j, Color player) {
-        Color oppositeColor = getOppositeColor(player);
+        Color oppositeColor = player.getOpponent();
         return (i > 0 && board[i - 1][j] == oppositeColor) // haut
                 || (i < SIZE - 1 && board[i + 1][j] == oppositeColor) // bas
                 || (j > 0 && board[i][j - 1] == oppositeColor) // gauche
@@ -213,7 +240,7 @@ public class Board implements Serializable {
         int y = j + c;
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return false;
         if (board[x][y] == player) return false;
-        Color oppositeColor = getOppositeColor(player);
+        Color oppositeColor = player.getOpponent();
         while (x >= 0 && x < SIZE && y >= 0 && y < SIZE && board[x][y] == oppositeColor) {
             x += r;
             y += c;
@@ -234,28 +261,28 @@ public class Board implements Serializable {
         if (isAdjacentOppositeColor(x, y, color)) {
             if (isPossibleMoveInDirection(x, y, color, -1, 0)) { // haut
                 int i = x - 1;
-                while (i > 0 && board[i][y] == getOppositeColor(color)) {
+                while (i > 0 && board[i][y] == color.getOpponent()) {
                     nbFlipped++;
                     i--;
                 }
             }
             if (isPossibleMoveInDirection(x, y, color, 1, 0)) { // bas
                 int i = x + 1;
-                while (i < SIZE - 1 && board[i][y] == getOppositeColor(color)) {
+                while (i < SIZE - 1 && board[i][y] == color.getOpponent()) {
                     nbFlipped++;
                     i++;
                 }
             }
             if (isPossibleMoveInDirection(x, y, color, 0, -1)) { // gauche
                 int j = y - 1;
-                while (j > 0 && board[x][j] == getOppositeColor(color)) {
+                while (j > 0 && board[x][j] == color.getOpponent()) {
                     nbFlipped++;
                     j--;
                 }
             }
             if (isPossibleMoveInDirection(x, y, color, 0, 1)) { // droite
                 int j = y + 1;
-                while (j < SIZE - 1 && board[x][j] == getOppositeColor(color)) {
+                while (j < SIZE - 1 && board[x][j] == color.getOpponent()) {
                     nbFlipped++;
                     j++;
                 }
@@ -263,7 +290,7 @@ public class Board implements Serializable {
             if (isPossibleMoveInDirection(x, y, color, -1, -1)) { // haut gauche
                 int i = x - 1;
                 int j = y - 1;
-                while (i > 0 && j > 0 && board[i][j] == getOppositeColor(color)) {
+                while (i > 0 && j > 0 && board[i][j] == color.getOpponent()) {
                     nbFlipped++;
                     i--;
                     j--;
@@ -272,7 +299,7 @@ public class Board implements Serializable {
             if (isPossibleMoveInDirection(x, y, color, -1, 1)) { // haut droite
                 int i = x - 1;
                 int j = y + 1;
-                while (i > 0 && j < SIZE - 1 && board[i][j] == getOppositeColor(color)) {
+                while (i > 0 && j < SIZE - 1 && board[i][j] == color.getOpponent()) {
                     nbFlipped++;
                     i--;
                     j++;
@@ -281,7 +308,7 @@ public class Board implements Serializable {
             if (isPossibleMoveInDirection(x, y, color, 1, -1)) { // bas gauche
                 int i = x + 1;
                 int j = y - 1;
-                while (i < SIZE - 1 && j > 0 && board[i][j] == getOppositeColor(color)) {
+                while (i < SIZE - 1 && j > 0 && board[i][j] == color.getOpponent()) {
                     nbFlipped++;
                     i++;
                     j--;
@@ -290,7 +317,7 @@ public class Board implements Serializable {
             if (isPossibleMoveInDirection(x, y, color, 1, 1)) { // bas droite
                 int i = x + 1;
                 int j = y + 1;
-                while (i < SIZE - 1 && j < SIZE - 1 && board[i][j] == getOppositeColor(color)) {
+                while (i < SIZE - 1 && j < SIZE - 1 && board[i][j] == color.getOpponent()) {
                     nbFlipped++;
                     i++;
                     j++;

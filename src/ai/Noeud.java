@@ -1,10 +1,12 @@
 package ai;
 
+import othello.Color;
+
 /**
  * Classe Noeud
  */
 public class Noeud {
-    private int val; // Valeur du nœud
+    private Color[][] val; // Valeur du nœud
     private Noeud gauche; // Fils gauche
     private Noeud droite; // Fils droit
 
@@ -12,7 +14,7 @@ public class Noeud {
      * Constructeur de la classe Nœud
      * @param val la valeur du nœud
      */
-    public Noeud(int val){
+    public Noeud(Color[][] val) {
         this.val = val;
         this.gauche = null;
         this.droite = null;
@@ -21,7 +23,7 @@ public class Noeud {
     /**
      * Change la valeur du nœud
      */
-    public void setVal(int val){
+    public void setVal(Color[][] val) {
         this.val = val;
     }
 
@@ -29,14 +31,14 @@ public class Noeud {
      * Retourne la valeur du nœud
      * @return la valeur du nœud
      */
-    public int getVal(){
+    public Color[][] getVal() {
         return this.val;
     }
 
     /**
      * Change le fils gauche du nœud
      */
-    public void setGauche(Noeud n){
+    public void setGauche(Noeud n) {
         this.gauche = n;
     }
 
@@ -44,14 +46,14 @@ public class Noeud {
      * Retourne le fils gauche du nœud
      * @return le fils gauche du nœud
      */
-    public Noeud getGauche(){
+    public Noeud getGauche() {
         return this.gauche;
     }
 
     /**
      * Change le fils droit du nœud
      */
-    public void setDroite(Noeud n){
+    public void setDroite(Noeud n) {
         this.droite = n;
     }
 
@@ -59,7 +61,7 @@ public class Noeud {
      * Retourne le fils droit du nœud
      * @return le fils droit du nœud
      */
-    public Noeud getDroite(){
+    public Noeud getDroite() {
         return this.droite;
     }
 }
