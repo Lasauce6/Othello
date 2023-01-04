@@ -10,17 +10,9 @@ import java.util.Scanner;
  * Classe Main
  * @author Othello
  * @version 1.0
- * @since 1.0
- * @see othello.Actions
- * @see othello.Board
- * @see othello.Color
- * @see java.io.FileInputStream
- * @see java.io.ObjectInputStream
- * @see java.util.Scanner
- * @see java.lang.Exception
  */
 
- 
+
 public class Main {
 
     /**

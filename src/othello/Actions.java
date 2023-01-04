@@ -265,6 +265,10 @@ public class Actions {
     }
 
 
+    /**
+     *test de "minmax"
+     * @param color
+     * @param prof
     public void clavierzqsd() {
         Scanner scanner = new Scanner(System.in);
         String touche = scanner.nextLine();
@@ -277,6 +281,6 @@ public class Actions {
         }
     }
 
-    
+
     */
 }
