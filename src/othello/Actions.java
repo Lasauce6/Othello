@@ -222,4 +222,46 @@ public class Actions {
             e.printStackTrace();
         }
     }
+
+
+
+    /**
+     *test de "minmax"
+     * @param color
+     * @param prof
+     
+    public void minmax (Color color, int prof) {
+        if (prof == 0) {
+            return;
+        }
+        ArrayList<Point> possibleMoves = board.getPossibleMoves(color);
+        int max = 0;
+        Point bestMove = null;
+        for (Point point : possibleMoves) {
+            int nb = board.getNbFlip(point.x, point.y, color);
+            if (nb > max) {
+                max = nb;
+                bestMove = point;
+            }
+        }
+        board.move(bestMove.x, bestMove.y, color);
+        minmax(getOppositeColor(color), prof - 1);
+    }
+        if (prof == 0) {
+            return;
+        }
+        ArrayList<Point> possibleMoves = board.getPossibleMoves(Color.BLACK);
+        int max = 0;
+        Point bestMove = null;
+        for (Point point : possibleMoves) {
+            int nb = board.getNbFlip(point.x, point.y, Color.BLACK);
+            if (nb > max) {
+                max = nb;
+                bestMove = point;
+            }
+        }
+        board.move(bestMove.x, bestMove.y, color);
+        minmax(getOppositeColor(color), prof - 1);
+    }
+    */
 }
