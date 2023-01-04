@@ -8,10 +8,12 @@ import java.util.ArrayList;
  * Classe Board
  */
 public class Board implements Serializable {
-    private Color currentPlayer;
-    private final int SIZE;
-    private final Color[][] board;
+    private Color currentPlayer; // Le joueur courant
+    private final int SIZE; // La taille du plateau de jeu
+    private final Color[][] board; // Le plateau de jeu
     private int numberOfMoves; // Nombre de coups joués
+
+
 
     /**
      * Constructeur de la classe Board
@@ -221,76 +223,78 @@ public class Board implements Serializable {
     }
 
     /**
-     * Retourne le nombre de pions retournés par le coup
+     * Retourne le nombre de pions retournés par un coup
      * @param x la ligne du coup
      * @param y la colonne du coup
      * @param color la couleur du coup
-     * @return le nombre de pions retournés par le coup
+     * @return le nombre de pions retournés par un coup
      */
-    public int getNbFlipped(int x, int y, Color color) {
+    public int getNbFlip(int x, int y, Color color) {
         int nbFlipped = 0;
-        if (isPossibleMoveInDirection(x, y, color, -1, 0)) { // haut
-            int i = x - 1;
-            while (board[i][y] == getOppositeColor(color)) {
-                nbFlipped++;
-                i--;
+        if (isAdjacentOppositeColor(x, y, color)) {
+            if (isPossibleMoveInDirection(x, y, color, -1, 0)) { // haut
+                int i = x - 1;
+                while (i > 0 && board[i][y] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    i--;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, 1, 0)) { // bas
-            int i = x + 1;
-            while (board[i][y] == getOppositeColor(color)) {
-                nbFlipped++;
-                i++;
+            if (isPossibleMoveInDirection(x, y, color, 1, 0)) { // bas
+                int i = x + 1;
+                while (i < SIZE - 1 && board[i][y] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    i++;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, 0, -1)) { // gauche
-            int j = y - 1;
-            while (board[x][j] == getOppositeColor(color)) {
-                nbFlipped++;
-                j--;
+            if (isPossibleMoveInDirection(x, y, color, 0, -1)) { // gauche
+                int j = y - 1;
+                while (j > 0 && board[x][j] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    j--;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, 0, 1)) { // droite
-            int j = y + 1;
-            while (board[x][j] == getOppositeColor(color)) {
-                nbFlipped++;
-                j++;
+            if (isPossibleMoveInDirection(x, y, color, 0, 1)) { // droite
+                int j = y + 1;
+                while (j < SIZE - 1 && board[x][j] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    j++;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, -1, -1)) { // haut gauche
-            int i = x - 1;
-            int j = y - 1;
-            while (board[i][j] == getOppositeColor(color)) {
-                nbFlipped++;
-                i--;
-                j--;
+            if (isPossibleMoveInDirection(x, y, color, -1, -1)) { // haut gauche
+                int i = x - 1;
+                int j = y - 1;
+                while (i > 0 && j > 0 && board[i][j] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    i--;
+                    j--;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, -1, 1)) { // haut droite
-            int i = x - 1;
-            int j = y + 1;
-            while (board[i][j] == getOppositeColor(color)) {
-                nbFlipped++;
-                i--;
-                j++;
+            if (isPossibleMoveInDirection(x, y, color, -1, 1)) { // haut droite
+                int i = x - 1;
+                int j = y + 1;
+                while (i > 0 && j < SIZE - 1 && board[i][j] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    i--;
+                    j++;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, 1, -1)) { // bas gauche
-            int i = x + 1;
-            int j = y - 1;
-            while (board[i][j] == getOppositeColor(color)) {
-                nbFlipped++;
-                i++;
-                j--;
+            if (isPossibleMoveInDirection(x, y, color, 1, -1)) { // bas gauche
+                int i = x + 1;
+                int j = y - 1;
+                while (i < SIZE - 1 && j > 0 && board[i][j] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    i++;
+                    j--;
+                }
             }
-        }
-        if (isPossibleMoveInDirection(x, y, color, 1, 1)) { // bas droite
-            int i = x + 1;
-            int j = y + 1;
-            while (board[i][j] == getOppositeColor(color)) {
-                nbFlipped++;
-                i++;
-                j++;
+            if (isPossibleMoveInDirection(x, y, color, 1, 1)) { // bas droite
+                int i = x + 1;
+                int j = y + 1;
+                while (i < SIZE - 1 && j < SIZE - 1 && board[i][j] == getOppositeColor(color)) {
+                    nbFlipped++;
+                    i++;
+                    j++;
+                }
             }
         }
         return nbFlipped;

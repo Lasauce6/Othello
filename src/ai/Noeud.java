@@ -1,32 +1,65 @@
 package ai;
 
+/**
+ * Classe Noeud
+ */
 public class Noeud {
+    private int val; // Valeur du nœud
+    private Noeud gauche; // Fils gauche
+    private Noeud droite; // Fils droit
 
-    public void setDroite(Noeud n) {
-    }
-
-    public void setGauche(Noeud n) {
+    /**
+     * Constructeur de la classe Nœud
+     * @param val la valeur du nœud
+     */
+    public Noeud(int val){
+        this.val = val;
+        this.gauche = null;
+        this.droite = null;
     }
 
     /**
-     * @return 0
+     * Change la valeur du nœud
      */
-    public int getVal() {
-        return 0;
+    public void setVal(int val){
+        this.val = val;
     }
 
     /**
-     * @return null
+     * Retourne la valeur du nœud
+     * @return la valeur du nœud
      */
-    public Noeud getDroite() {
-        return null;
+    public int getVal(){
+        return this.val;
     }
 
     /**
-     * @return null
+     * Change le fils gauche du nœud
      */
-    public Noeud getGauche() {
-        return null;
+    public void setGauche(Noeud n){
+        this.gauche = n;
     }
-    
+
+    /**
+     * Retourne le fils gauche du nœud
+     * @return le fils gauche du nœud
+     */
+    public Noeud getGauche(){
+        return this.gauche;
+    }
+
+    /**
+     * Change le fils droit du nœud
+     */
+    public void setDroite(Noeud n){
+        this.droite = n;
+    }
+
+    /**
+     * Retourne le fils droit du nœud
+     * @return le fils droit du nœud
+     */
+    public Noeud getDroite(){
+        return this.droite;
+    }
 }
