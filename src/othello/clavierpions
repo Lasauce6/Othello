@@ -1,0 +1,37 @@
+/**
+ * public class clavierpions extends Actions(){
+    public clavierpions(Board board) {
+        super(board);
+    }
+    public void test(Color color) {
+        Scanner scanner = new Scanner(System.in);
+        int x = 0;
+        int y = 0;
+        while (true) {
+            printBoard();
+            System.out.println("Joueur " + color + " :");
+            System.out.print("Entrez la ligne : ");
+            try {
+                x = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Erreur : Veuillez entrer un nombre entre 1 et " + board.getSize() + " inclus");
+                scanner.next();
+            }
+            System.out.print("Entrez la colonne : ");
+            try {
+                y = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Erreur : Veuillez entrer un nombre entre 1 et " + board.getSize() + " inclus");
+                scanner.next();
+            }
+            if (board.getBoard()[x - 1][y - 1] == Color.POSSIBLE_MOVE) {
+                board.setBoard(x - 1, y - 1, color);
+                board.flip(x - 1, y - 1, color);
+                break;
+            } else {
+                System.out.println("Erreur : Veuillez entrer une case valide");
+            }
+        }
+    }
+}
+*/
