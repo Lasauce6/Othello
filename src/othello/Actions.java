@@ -263,5 +263,20 @@ public class Actions {
         board.move(bestMove.x, bestMove.y, color);
         minmax(getOppositeColor(color), prof - 1);
     }
+
+
+    public void clavierzqsd() {
+        Scanner scanner = new Scanner(System.in);
+        String touche = scanner.nextLine();
+        switch (touche) {
+            case "z" -> System.out.println("haut");
+            case "q" -> System.out.println("gauche");
+            case "s" -> System.out.println("bas");
+            case "d" -> System.out.println("droite");
+            default -> System.out.println("touche invalide");
+        }
+    }
+
+    
     */
 }
