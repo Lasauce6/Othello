@@ -206,6 +206,7 @@ public class Actions {
      * @param color le joueur qui commence
      */
     public void playIA(Color color) {
+        
         //TODO: Jouer contre l'IA
     }
 
