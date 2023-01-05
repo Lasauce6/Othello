@@ -114,7 +114,6 @@ public class State {
     }
 
     /**
-     * Retourne la valeur d'un joueur
      * @return la valeur d'un joueur
      */
     public int getValue() {
@@ -129,7 +128,6 @@ public class State {
     }
 
     /**
-     * Retourne la liste des enfants d'un état
      * @return la liste des enfants d'un état
      */
     public ArrayList<State> getChildren() {

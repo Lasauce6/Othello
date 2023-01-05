@@ -1,8 +1,20 @@
-/**
- * public class clavierpions extends Actions(){
+
+package othello;
+import java.util.Scanner;
+import java.awt.Color;
+
+
+
+public class clavierpions extends Actions(){
     public clavierpions(Board board) {
         super(board);
     }
+
+    /**
+     * Demande au joueur de jouer un coup
+     * @param color la couleur du joueur
+     * @return le coup joué
+     */
     public void test(Color color) {
         Scanner scanner = new Scanner(System.in);
         int x = 0;
@@ -34,4 +46,3 @@
         }
     }
 }
-*/

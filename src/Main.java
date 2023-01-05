@@ -99,6 +99,13 @@ public class Main {
         }
     }
 
+    /**
+     * Fonction qui permet de choisir la taille du plateau
+     * @return la taille du plateau
+     * @throws Exception si la taille n'est pas comprise entre 4 et 8
+     * @throws Exception si la taille n'est pas un nombre
+     * @throws Exception si la taille n'est pas un entier
+     */
     private static int choseSize() {
         Scanner scanner = new Scanner(System.in);
         int size;
@@ -117,6 +124,13 @@ public class Main {
         return size;
     }
 
+    /**
+     * Fonction qui permet de choisir la couleur du joueur
+     * @return la couleur du joueur
+     * @throws Exception si la couleur n'est pas comprise entre 1 et 2
+     * @throws Exception si la couleur n'est pas un nombre
+     * @throws Exception si la couleur n'est pas un entier
+     */
     private static Color choseColor() {
         Scanner scanner = new Scanner(System.in);
         int choice;
