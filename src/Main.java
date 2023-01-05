@@ -1,3 +1,5 @@
+import ai.MinMax;
+import ai.Naif;
 import othello.Actions;
 import othello.Board;
 import othello.Color;
@@ -28,51 +30,65 @@ public class Main {
             try {
                 choice = scanner.nextInt();
             }
-            catch (Exception e) {
+            catch (Exception e) { // Si l'utilisateur entre autre chose qu'un entier
                 System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 4 inclus");
                 scanner.next();
             }
-            switch (choice) { // TODO: ajouter un menu pour l'IA
-                case 1 -> {
+            switch (choice) {
+                case 1 -> { // Jouer en 1v1
                     System.out.print("Choix de la taille du plateau : ");
-                    int size = choseSize();
+                    int size = choseSize(); // On demande la taille du plateau
                     if (size == 0) break;
-                    Board board1 = new Board(size);
-                    Actions actions1 = new Actions(board1);
-                    actions1.play(Color.BLACK);
+                    Board board1 = new Board(size); // On crée le plateau
+                    Actions actions1 = new Actions(board1); // On crée les actions
+                    actions1.play(Color.BLACK); // On lance la partie
                     choice = 0;
                 }
 
-                case 2 -> {
+                case 2 -> { // Jouer contre une IA
+                    // On demande la taille du plateau
                     System.out.print("Choix de la taille du plateau : ");
                     int size = choseSize();
                     if (size == 0) break;
-                    Board board2 = new Board(size);
-                    Actions actions2 = new Actions(board2);
-                    System.out.println("Choix du joueur : ");
+                    Board board2 = new Board(size); // On crée le plateau
+                    Actions actions2 = new Actions(board2); // On crée les actions
 
+                    // On demande le joueur
+                    System.out.println("Choix du joueur : ");
                     Color player = choseColor();
                     if (player == Color.EMPTY) break;
 
+                    // On demande l'IA
                     System.out.println("Choix de l'IA : ");
-                    System.out.println("1. Naif");
-                    System.out.println("2. Minimax");
-                    System.out.print("Choix : ");
-                    int choiceIA = scanner.nextInt();
+                    int choiceIA = choseIA();
+                    if (choiceIA == 0) break;
+
+                    // On lance la partie
                     if (choiceIA == 1) {
-                        actions2.playIA(Color.BLACK, 1);
+                        Naif naif = new Naif(1, player.getOpponent(), board2);
+                        board2.setNaif(naif);
+                        actions2.play(naif);
                     }
                     else if (choiceIA == 2) {
-                        actions2.playIA(Color.BLACK, 2);
+                        Naif naif = new Naif(2, player.getOpponent(), board2);
+                        board2.setNaif(naif);
+                        actions2.play(naif);
                     }
-                    else {
-                        System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 2 inclus");
-                        break;
+                    else if (choiceIA == 3) {
+                        MinMax minMax = new MinMax(player.getOpponent(), 1);
+                        board2.setMinMax(minMax);
+                        actions2.play(minMax);
                     }
+                    else if (choiceIA == 4) {
+                        MinMax minMax = new MinMax(player.getOpponent(), 2);
+                        board2.setMinMax(minMax);
+                        actions2.play(minMax);
+                    }
+
                     choice = 0;
                 }
 
-                case 3 -> {
+                case 3 -> { // Charger une partie
                     System.out.print("Entrer le nom du fichier : ");
                     Scanner scanner3 = new Scanner(System.in);
                     String fileName = scanner3.nextLine(); // On demande le nom du fichier
@@ -82,7 +98,9 @@ public class Main {
                         Board board3 = (Board) ois.readObject(); // On charge la partie
                         System.out.println("Chargement terminé");
                         Actions actions2 = new Actions(board3);
-                        if (board3 != null) actions2.play(board3.getCurrentPlayer());
+                        if (board3 != null && board3.isIA() && board3.getNaif() != null) actions2.play(board3.getNaif()); // Si l'IA est une IA Naif
+                        else if (board3 != null && board3.isIA() && board3.getMinMax() != null) actions2.play(board3.getMinMax()); // Si l'IA est une IA MinMax
+                        else if (board3 != null && !board3.isIA()) actions2.play(board3.getCurrentPlayer()); // Si c'est une partie de 1v1
                         else System.out.println("Erreur : Impossible de charger la partie");
                     } catch (Exception e) {
                         System.out.println("Erreur : Fichier introuvable ou inexistant");
@@ -92,19 +110,16 @@ public class Main {
                     choice = 0;
                 }
 
-                case 4 -> System.out.println("Au revoir !");
+                case 4 -> System.out.println("Au revoir !"); // Quitter
 
-                default -> System.out.println("Choix invalide !");
+                default -> System.out.println("Choix invalide !"); // Choix invalide
             }
         }
     }
 
     /**
-     * Fonction qui permet de choisir la taille du plateau
-     * @return la taille du plateau
-     * @throws Exception si la taille n'est pas comprise entre 4 et 8
-     * @throws Exception si la taille n'est pas un nombre
-     * @throws Exception si la taille n'est pas un entier
+     * Retourne la taille du plateau choisie par l'utilisateur
+     * @return la taille du plateau choisie par l'utilisateur
      */
     private static int choseSize() {
         Scanner scanner = new Scanner(System.in);
@@ -125,16 +140,16 @@ public class Main {
     }
 
     /**
-     * Fonction qui permet de choisir la couleur du joueur
-     * @return la couleur du joueur
-     * @throws Exception si la couleur n'est pas comprise entre 1 et 2
-     * @throws Exception si la couleur n'est pas un nombre
-     * @throws Exception si la couleur n'est pas un entier
+     * Retourne la couleur choisie par l'utilisateur
+     * @return la couleur choisie par l'utilisateur
      */
     private static Color choseColor() {
         Scanner scanner = new Scanner(System.in);
         int choice;
         try {
+            System.out.println("1. Noir");
+            System.out.println("2. Blanc");
+            System.out.print("Choix : ");
             choice = scanner.nextInt();
             if (choice < 1 || choice > 2) {
                 System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 2 inclus");
@@ -148,6 +163,33 @@ public class Main {
         }
         if (choice == 1) return Color.BLACK;
         else return Color.WHITE;
+    }
+
+    /**
+     * Retourne le choix de l'IA choisie par l'utilisateur
+     * @return le choix de l'IA choisie par l'utilisateur
+     */
+    private static int choseIA() {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        try {
+            System.out.println("1. Naif");
+            System.out.println("2. Naif + Arbre");
+            System.out.println("3. Minimax");
+            System.out.println("4. Alpha-Beta");
+            System.out.print("Choix : ");
+            choice = scanner.nextInt();
+            if (choice < 1 || choice > 4) {
+                System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 4 inclus");
+                return 0;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Erreur : Veuillez entrer un nombre entre 1 et 4 inclus");
+            scanner.next();
+            return 0;
+        }
+        return choice;
     }
 }
 

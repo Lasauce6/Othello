@@ -4,13 +4,13 @@ import othello.Board;
 import othello.Color;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Classe Naif
  */
-public class Naif {
+public class Naif implements Serializable {
     private final Board board; // Le plateau de jeu
     private final Color color; // La couleur du joueur
     private final int level; // Le niveau de l'IA
@@ -23,6 +23,16 @@ public class Naif {
         this.level = level;
         this.color = color;
         this.board = board;
+    }
+
+    /**
+     * Constructeur de copie de la classe Naif
+     * @param naif l'IA à copier
+     */
+    public Naif(Naif naif) {
+        this.level = naif.getLevel();
+        this.color = naif.getColor();
+        this.board = naif.getBoard();
     }
 
     /**
@@ -39,6 +49,14 @@ public class Naif {
      */
     public Color getColor() {
         return color;
+    }
+
+    /**
+     * Retourne le plateau de jeu
+     * @return le plateau de jeu
+     */
+    public Board getBoard() {
+        return board;
     }
 
     /**
@@ -59,8 +77,16 @@ public class Naif {
      */
     private Point getBestMoveLevel1() {
         ArrayList<Point> moves = board.getPossibleMoves(color);
-        Random random = new Random();
-        return moves.get(random.nextInt(moves.size()));
+        int max = 0;
+        Point bestMove = null;
+        for (Point point : moves) {
+            int nb = board.getNbFlip(point.x, point.y, color);
+            if (nb > max) {
+                max = nb;
+                bestMove = point;
+            }
+        }
+        return bestMove;
     }
 
     /**
@@ -68,7 +94,7 @@ public class Naif {
      * @return le meilleur coup à jouer au niveau 2
      */
     private Point getBestMoveLevel2() {
-        return null; // TODO: a faire avec un arbre de recherche
+        return null; // TODO : à faire avec un arbre de recherche
     }
 
 }

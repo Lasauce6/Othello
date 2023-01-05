@@ -1,5 +1,8 @@
 package othello;
 
+import ai.MinMax;
+import ai.Naif;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +16,9 @@ public class Board implements Serializable {
     private final Color[][] board; // Le plateau de jeu
     private int numberOfMoves; // Nombre de coups joués
     private Point lastMove; // Le dernier coup joué
+    private boolean isIA; // Indique si l'IA est présente
+    private Naif naif; // L'IA si elle est présente
+    private MinMax minMax; // L'IA si elle est présente
 
     /**
      * Constructeur de copie de la classe Board
@@ -29,10 +35,19 @@ public class Board implements Serializable {
         this.numberOfMoves = board.getNumberOfMoves();
         this.currentPlayer = board.getCurrentPlayer();
         this.lastMove = board.getLastMove();
+        if (board.isIA() && board.getNaif() != null) {
+            this.naif = new Naif(board.getNaif());
+            this.isIA = true;
+        } else if (board.isIA() && board.getMinMax() != null) {
+            this.minMax = new MinMax(board.getMinMax());
+            this.isIA = true;
+        } else {
+            this.isIA = false;
+        }
     }
 
     /**
-     * Constructeur de la classe Board
+     * Constructeur de la classe Board sans IA
      * @param SIZE la taille du plateau de jeu
      */
     public Board(int SIZE) {
@@ -48,8 +63,11 @@ public class Board implements Serializable {
         board[SIZE / 2][(SIZE / 2) - 1] = Color.BLACK;
         board[SIZE / 2][SIZE / 2] = Color.WHITE;
         this.numberOfMoves = 4;
-        this.currentPlayer = null;
+        this.currentPlayer = Color.BLACK;
         this.lastMove = null;
+        this.isIA = false;
+        this.naif = null;
+        this.minMax = null;
     }
 
     /**
@@ -109,6 +127,48 @@ public class Board implements Serializable {
     }
 
     /**
+     * Indique si l'IA est présente
+     * @return true si l'IA est présente, false sinon
+     */
+    public boolean isIA() {
+        return isIA;
+    }
+
+    /**
+     * Retourne l'IA naif
+     * @return l'IA naif
+     */
+    public Naif getNaif() {
+        return naif;
+    }
+
+    /**
+     * Retourne l'IA MinMax
+     * @return l'IA MinMax
+     */
+    public MinMax getMinMax() {
+        return minMax;
+    }
+
+    /**
+     * Change le plateau pour une IA minmax
+     * @param minMax l'IA minmax
+     */
+    public void setMinMax(MinMax minMax) {
+        this.isIA = true;
+        this.minMax = minMax;
+    }
+
+    /**
+     * Change le plateau pour une IA naif
+     * @param naif l'IA naif
+     */
+    public void setNaif(Naif naif) {
+        this.isIA = true;
+        this.naif = naif;
+    }
+
+    /**
      * Joue un coup
      * @param r la ligne du coup
      * @param c la colonne du coup
@@ -120,7 +180,7 @@ public class Board implements Serializable {
             numberOfMoves++;
             board[r][c] = player;
             flip(r, c, player);
-            currentPlayer = (currentPlayer == Color.BLACK) ? Color.WHITE : Color.BLACK;
+            currentPlayer = currentPlayer.getOpponent();
         }
     }
 
