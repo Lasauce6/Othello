@@ -58,8 +58,8 @@ public class MinMax implements Serializable {
         ArrayList<State> children = state.getChildren();
         for (State child : children) {
             int value;
-            if (level == 1) value = minMax(child, child.getPlayer());
-            else value = minMax(child, child.getPlayer(), Integer.MIN_VALUE, Integer.MAX_VALUE);
+            if (level == 1) value = minMax(child, child.getPlayer(), 0);
+            else value = minMax(child, child.getPlayer(), 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
             if (player == Color.BLACK) {
                 if (value > bestValue) {
                     bestValue = value;
@@ -72,23 +72,25 @@ public class MinMax implements Serializable {
                 }
             }
         }
-        return bestMove;
+        if (bestMove == null) return children.get(0).getLastMove(); // Si aucun coup n'est trouvé, on joue le premier coup possible
+        else return bestMove;
     }
 
     /**
      * Calcule le max d'un état
      * @param state l'état
      * @param player le joueur
+     * @param depth la profondeur
      * @return le max d'un état
      */
-    private int minMax(State state, Color player) {
-        if (state.isTerminal()) { // Si l'état est terminal on retourne sa valeur
+    private int minMax(State state, Color player, int depth) {
+        if (state.isTerminal() || depth == 6) { // Si l'état est terminal ou la profondeur est maximale on retourne sa valeur
             return state.getValue();
         }
         int bestValue = (player == Color.BLACK) ? Integer.MIN_VALUE : Integer.MAX_VALUE; // On initialise la meilleure valeur (MIN ou MAX)
         ArrayList<State> children = state.getChildren();
         for (State child : children) { // Parcours de la liste des états enfants de l'état courant
-            int value = minMax(child, player.getOpponent());
+            int value = minMax(child, player.getOpponent(), depth + 1);
             if (player == Color.BLACK) {
                 bestValue = Math.max(bestValue, value);
             } else {
@@ -106,14 +108,14 @@ public class MinMax implements Serializable {
      * @param beta beta
      * @return le max d'un état avec alpha-beta
      */
-    private int minMax(State state, Color player, int alpha, int beta) {
-        if (state.isTerminal()) { // Si l'état est terminal on retourne sa valeur
+    private int minMax(State state, Color player, int depth, int alpha, int beta) {
+        if (state.isTerminal() || depth == 8) { // Si l'état est terminal ou la profondeur est maximale on retourne sa valeur
             return state.getValue();
         }
         int bestValue = (player == Color.BLACK) ? Integer.MIN_VALUE : Integer.MAX_VALUE; // On initialise la meilleure valeur (MIN ou MAX)
         ArrayList<State> children = state.getChildren();
         for (State child : children) { // Parcours de la liste des états enfants de l'état courant
-            int value = minMax(child, player.getOpponent(), alpha, beta);
+            int value = minMax(child, player.getOpponent(), depth + 1, alpha, beta);
             if (player == Color.BLACK) {
                 bestValue = Math.max(bestValue, value);
                 alpha = Math.max(alpha, bestValue);
@@ -125,5 +127,4 @@ public class MinMax implements Serializable {
         }
         return bestValue;
     }
-
 }
