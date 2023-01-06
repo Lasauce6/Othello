@@ -29,3 +29,8 @@ Le jeu est fonctionel, il est possible de jouer contre l'IA, de sauvegarder et c
 
 
 
+
+## Compte rendu :
+Le jeu est fonctionel mais l'IA n'est pas encore implémentée.
+
+
