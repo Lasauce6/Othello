@@ -1,28 +1,28 @@
 package othello;
 
+import ai.MinMax;
+import ai.Naif;
+
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
-    private final int SIZE;
-    private Color[][] board;
+/**
+ * Classe Board
+ */
+public class Board implements Serializable {
+    private Color currentPlayer; // Le joueur courant
+    private final int SIZE; // La taille du plateau de jeu
+    private final Color[][] board; // Le plateau de jeu
     private int numberOfMoves; // Nombre de coups joués
-
-    /**
-     * Constructeur de copie la classe Board
-     * @param board le plateau de jeu
-     * @param numberOFMoves le nombre de coups joués
-     * @param SIZE la taille du plateau de jeu
-     */
-    public Board(Color[][] board, int numberOFMoves, int SIZE) {
-        this.SIZE = SIZE;
-        this.board = board;
-        this.numberOfMoves = numberOFMoves;
-    }
+    private Point lastMove; // Le dernier coup joué
+    private boolean isIA; // Indique si l'IA est présente
+    private Naif naif; // L'IA si elle est présente
+    private MinMax minMax; // L'IA si elle est présente
 
     /**
      * Constructeur de copie de la classe Board
-     * @param board le plateau de jeu
+     * @param board le plateau de jeu à copier
      */
     public Board(Board board) {
         this.SIZE = board.getSize();
@@ -32,14 +32,22 @@ public class Board {
                 this.board[i][j] = board.getBoard()[i][j];
             }
         }
-        for (int i = 0; i < SIZE; i++) {
-            System.arraycopy(board.board[i], 0, this.board[i], 0, SIZE);
+        this.numberOfMoves = board.getNumberOfMoves();
+        this.currentPlayer = board.getCurrentPlayer();
+        this.lastMove = board.getLastMove();
+        if (board.isIA() && board.getNaif() != null) {
+            this.naif = new Naif(board.getNaif());
+            this.isIA = true;
+        } else if (board.isIA() && board.getMinMax() != null) {
+            this.minMax = new MinMax(board.getMinMax());
+            this.isIA = true;
+        } else {
+            this.isIA = false;
         }
-        this.numberOfMoves = board.numberOfMoves;
     }
 
     /**
-     * Constructeur de la classe Board
+     * Constructeur de la classe Board sans IA
      * @param SIZE la taille du plateau de jeu
      */
     public Board(int SIZE) {
@@ -55,7 +63,11 @@ public class Board {
         board[SIZE / 2][(SIZE / 2) - 1] = Color.BLACK;
         board[SIZE / 2][SIZE / 2] = Color.WHITE;
         this.numberOfMoves = 4;
-
+        this.currentPlayer = Color.BLACK;
+        this.lastMove = null;
+        this.isIA = false;
+        this.naif = null;
+        this.minMax = null;
     }
 
     /**
@@ -75,14 +87,6 @@ public class Board {
     }
 
     /**
-     * Change le nombre de coups joués
-     * @param numberOfMoves le nouveau nombre de coups joués
-     */
-    public void setNumberOfMoves(int numberOfMoves) {
-        this.numberOfMoves = numberOfMoves;
-    }
-
-    /**
      * Retourne le plateau de jeu
      * @return le plateau de jeu
      */
@@ -91,13 +95,78 @@ public class Board {
     }
 
     /**
-     * Change le plateau de jeu
-     * @param board le nouveau plateau de jeu
+     * Retourne le joueur courant
+     * @return le joueur courant
      */
-    public void setBoard(Color[][] board) {
-        this.board = board;
+    public Color getCurrentPlayer() {
+        return currentPlayer;
     }
 
+    /**
+     * Change le joueur courant
+     * @param currentPlayer le nouveau joueur courant
+     */
+    public void setCurrentPlayer(Color currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    /**
+     * Retourne le dernier coup joué
+     * @return le dernier coup joué
+     */
+    public Point getLastMove() {
+        return lastMove;
+    }
+
+    /**
+     * Change le dernier coup joué
+     * @param lastMove le nouveau dernier coup joué
+     */
+    public void setLastMove(Point lastMove) {
+        this.lastMove = lastMove;
+    }
+
+    /**
+     * Indique si l'IA est présente
+     * @return true si l'IA est présente, false sinon
+     */
+    public boolean isIA() {
+        return isIA;
+    }
+
+    /**
+     * Retourne l'IA naif
+     * @return l'IA naif
+     */
+    public Naif getNaif() {
+        return naif;
+    }
+
+    /**
+     * Retourne l'IA MinMax
+     * @return l'IA MinMax
+     */
+    public MinMax getMinMax() {
+        return minMax;
+    }
+
+    /**
+     * Change le plateau pour une IA minmax
+     * @param minMax l'IA minmax
+     */
+    public void setMinMax(MinMax minMax) {
+        this.isIA = true;
+        this.minMax = minMax;
+    }
+
+    /**
+     * Change le plateau pour une IA naif
+     * @param naif l'IA naif
+     */
+    public void setNaif(Naif naif) {
+        this.isIA = true;
+        this.naif = naif;
+    }
 
     /**
      * Joue un coup
@@ -107,9 +176,11 @@ public class Board {
      */
     public void move(int r, int c, Color player) {
         if (r < SIZE && r >= 0 && c < SIZE && c >= 0 && player != Color.EMPTY) {
+            lastMove = new Point(r, c);
             numberOfMoves++;
             board[r][c] = player;
             flip(r, c, player);
+            currentPlayer = currentPlayer.getOpponent();
         }
     }
 
@@ -197,21 +268,6 @@ public class Board {
     }
 
     /**
-     * Donne le joueur opposé
-     * @param player le joueur actuel
-     * @return le joueur opposé
-     */
-    private Color getOppositeColor(Color player) {
-        if (player == Color.BLACK) {
-            return Color.WHITE;
-        } else if (player == Color.WHITE) {
-            return Color.BLACK;
-        } else {
-            return Color.EMPTY;
-        }
-    }
-
-    /**
      * Retourne vrai si le pion joué est adjacent à une case de la couleur adverse
      * @param i la ligne du pion
      * @param j la colonne du pion
@@ -219,7 +275,7 @@ public class Board {
      * @return vrai si le pion joué est adjacent à une case de la couleur adverse
      */
     private boolean isAdjacentOppositeColor(int i, int j, Color player) {
-        Color oppositeColor = getOppositeColor(player);
+        Color oppositeColor = player.getOpponent();
         return (i > 0 && board[i - 1][j] == oppositeColor) // haut
                 || (i < SIZE - 1 && board[i + 1][j] == oppositeColor) // bas
                 || (j > 0 && board[i][j - 1] == oppositeColor) // gauche
@@ -244,12 +300,90 @@ public class Board {
         int y = j + c;
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return false;
         if (board[x][y] == player) return false;
-        Color oppositeColor = getOppositeColor(player);
+        Color oppositeColor = player.getOpponent();
         while (x >= 0 && x < SIZE && y >= 0 && y < SIZE && board[x][y] == oppositeColor) {
             x += r;
             y += c;
         }
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return false;
         return board[x][y] == player;
+    }
+
+    /**
+     * Retourne le nombre de pions retournés par un coup
+     * @param x la ligne du coup
+     * @param y la colonne du coup
+     * @param color la couleur du coup
+     * @return le nombre de pions retournés par un coup
+     */
+    public int getNbFlip(int x, int y, Color color) {
+        int nbFlipped = 0;
+        if (isAdjacentOppositeColor(x, y, color)) {
+            if (isPossibleMoveInDirection(x, y, color, -1, 0)) { // haut
+                int i = x - 1;
+                while (i > 0 && board[i][y] == color.getOpponent()) {
+                    nbFlipped++;
+                    i--;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, 1, 0)) { // bas
+                int i = x + 1;
+                while (i < SIZE - 1 && board[i][y] == color.getOpponent()) {
+                    nbFlipped++;
+                    i++;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, 0, -1)) { // gauche
+                int j = y - 1;
+                while (j > 0 && board[x][j] == color.getOpponent()) {
+                    nbFlipped++;
+                    j--;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, 0, 1)) { // droite
+                int j = y + 1;
+                while (j < SIZE - 1 && board[x][j] == color.getOpponent()) {
+                    nbFlipped++;
+                    j++;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, -1, -1)) { // haut gauche
+                int i = x - 1;
+                int j = y - 1;
+                while (i > 0 && j > 0 && board[i][j] == color.getOpponent()) {
+                    nbFlipped++;
+                    i--;
+                    j--;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, -1, 1)) { // haut droite
+                int i = x - 1;
+                int j = y + 1;
+                while (i > 0 && j < SIZE - 1 && board[i][j] == color.getOpponent()) {
+                    nbFlipped++;
+                    i--;
+                    j++;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, 1, -1)) { // bas gauche
+                int i = x + 1;
+                int j = y - 1;
+                while (i < SIZE - 1 && j > 0 && board[i][j] == color.getOpponent()) {
+                    nbFlipped++;
+                    i++;
+                    j--;
+                }
+            }
+            if (isPossibleMoveInDirection(x, y, color, 1, 1)) { // bas droite
+                int i = x + 1;
+                int j = y + 1;
+                while (i < SIZE - 1 && j < SIZE - 1 && board[i][j] == color.getOpponent()) {
+                    nbFlipped++;
+                    i++;
+                    j++;
+                }
+            }
+        }
+        return nbFlipped;
     }
 }
