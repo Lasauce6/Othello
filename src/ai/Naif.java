@@ -75,8 +75,29 @@ public class Naif implements Serializable {
      * Retourne le meilleur coup à jouer au niveau 1
      * @return le meilleur coup à jouer au niveau 1
      */
-    private Point getBestMoveLevel1() {
+        private Point getBestMoveLevel1() {
         ArrayList<Point> moves = board.getPossibleMoves(color);
+        int max = 0; // Le nombre de pions retournés par le meilleur coup
+        Point bestMove = null;
+        for (Point point : moves) {
+            int nb = board.getNbFlip(point.x, point.y, color); // Le nombre de pions retournés par le coup
+            if (nb > max) { // Si le nombre de pions retournés est supérieur au nombre de pions retournés par le meilleur coup
+                max = nb;
+                bestMove = point;
+            }
+        }
+        return bestMove; // Retourne le meilleur coup
+    }
+
+    /**
+     * Retourne le meilleur coup à jouer au niveau 2
+     * @return le meilleur coup à jouer au niveau 2
+     */
+    private Point getBestMoveLevel2() {
+        Arbre arbre = new Arbre();
+        ArrayList<Point> moves = board.getPossibleMoves(color);
+        arbre.createArbre(moves, new State(board));
+        arbre.print();
         int max = 0;
         Point bestMove = null;
         for (Point point : moves) {
@@ -87,14 +108,6 @@ public class Naif implements Serializable {
             }
         }
         return bestMove;
-    }
-
-    /**
-     * Retourne le meilleur coup à jouer au niveau 2
-     * @return le meilleur coup à jouer au niveau 2
-     */
-    private Point getBestMoveLevel2() {
-        return null; // TODO : à faire avec un arbre de recherche
     }
 
 }

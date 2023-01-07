@@ -1,19 +1,19 @@
 package ai;
 
-import othello.Color;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Classe Arbre
  */
 public class Arbre {
-    private final Noeud racine;
+    private Noeud racine;
 
     /**
      * Constructeur de la classe Arbre
-     * @param val la valeur de la racine
      */
-    public Arbre(Color[][] val){
-        this.racine = new Noeud(val);
+    public Arbre() {
+        this.racine = null;
     }
 
     /**
@@ -25,44 +25,58 @@ public class Arbre {
     }
 
     /**
-     * Retourne le nombre de nœuds de l'arbre
-     * @return le nombre de nœuds de l'arbre
+     * Ajoute un nœud à l'arbre
+     * @param val la valeur du nœud
+     * @param nbFlips le nombre de pions retournés
      */
-    public int getNbNoeuds(){
-        return getNbNoeuds(this.racine);
+    public void add(Point val, int nbFlips){
+        racine = add(racine, val, nbFlips);
     }
 
     /**
-     * Retourne le nombre de nœuds de l'arbre
+     * Sous-méthode de add
      * @param n le nœud courant
-     * @return le nombre de nœuds de l'arbre
+     * @param val la valeur du nœud
+     * @param nbFlips le nombre de pions retournés
      */
-    private int getNbNoeuds(Noeud n){
-        if (n == null){
-            return 0;
-        } else {
-            return 1 + getNbNoeuds(n.getGauche()) + getNbNoeuds(n.getDroite());
+    private Noeud add(Noeud n, Point val, int nbFlips) {
+        if (n == null) return new Noeud(val, nbFlips);
+
+        if (n.getNbFlips() <= n.getNbFlips()) n.setGauche(add(n.getGauche(), val, nbFlips));
+        else if (nbFlips > n.getNbFlips()) n.setDroite(add(n.getDroite(), val, nbFlips));
+        else return n;
+
+        return n;
+    }
+
+    /**
+     * Créé un arbre à partir d'une liste de coups
+     * @param moves la liste de coups
+     * @param state l'état du jeu
+     */
+    public void createArbre(ArrayList<Point> moves, State state) {
+        for (Point move : moves) {
+            int nbFlips = state.getBoardCopy().getNbFlip(move.x, move.y, state.getPlayer());
+            add(move, nbFlips);
         }
     }
 
     /**
-     * Retourne la hauteur de l'arbre
-     * @return la hauteur de l'arbre
+     * Affiche l'arbre
      */
-    public int getHauteur(){
-        return getHauteur(this.racine);
+    public void print(){
+        print(racine);
     }
 
     /**
-     * Retourne la hauteur de l'arbre
+     * Sous fonction d'affichage de l'arbre
      * @param n le nœud courant
-     * @return la hauteur de l'arbre
      */
-    private int getHauteur(Noeud n){
-        if (n == null){
-            return 0;
-        } else {
-            return 1 + Math.max(getHauteur(n.getGauche()), getHauteur(n.getDroite()));
-        }
+    private void print(Noeud n){
+        if (n == null) return;
+        print(n.getGauche());
+        String move = "" + (char) (n.getVal().y + 'A') + (n.getVal().x + 1);
+        System.out.println(move + " " + n.getNbFlips());
+        print(n.getDroite());
     }
 }

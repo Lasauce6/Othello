@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Classe State
  */
 public class State {
-    private Board boardCopy; // Le plateau copié de jeu
+    private final Board boardCopy; // Le plateau copié de jeu
     private Color[][] board; // Le plateau de jeu
     private Color player; // Le joueur
     private int numberOfMoves; // Le nombre de coups joués
