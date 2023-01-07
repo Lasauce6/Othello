@@ -18,7 +18,7 @@ We made this project for our third semester.
 - [X] Implémenter les algorithmes de logique de jeu
 - [X] Pouvoir sauvegarder/charger une partie
 - [ ] Saisie de coups avec un choix z q s d et entrée
-- [X] IA naïve (l'arbre ne marche pas encore)
+- [X] IA naïve
 - [X] IA MiniMax (2 niveaux : profondeur donnée et alpha-beta)
 - [ ] Implémenter l'interface graphique (bonus)
 

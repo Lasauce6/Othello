@@ -1,12 +1,13 @@
 package ai;
 
-import othello.Color;
+import java.awt.*;
 
 /**
  * Classe Noeud
  */
 public class Noeud {
-    private Color[][] val; // Valeur du nœud
+    private Point val; // Valeur du nœud
+    int nbFlips; // Nombre de pions retournés
     private Noeud gauche; // Fils gauche
     private Noeud droite; // Fils droit
 
@@ -14,8 +15,9 @@ public class Noeud {
      * Constructeur de la classe Nœud
      * @param val la valeur du nœud
      */
-    public Noeud(Color[][] val) {
+    public Noeud(Point val, int nbFlips) {
         this.val = val;
+        this.nbFlips = nbFlips;
         this.gauche = null;
         this.droite = null;
     }
@@ -23,7 +25,7 @@ public class Noeud {
     /**
      * Change la valeur du nœud
      */
-    public void setVal(Color[][] val) {
+    public void setVal(Point val) {
         this.val = val;
     }
 
@@ -31,7 +33,7 @@ public class Noeud {
      * Retourne la valeur du nœud
      * @return la valeur du nœud
      */
-    public Color[][] getVal() {
+    public Point getVal() {
         return this.val;
     }
 
@@ -63,5 +65,13 @@ public class Noeud {
      */
     public Noeud getDroite() {
         return this.droite;
+    }
+
+    /**
+     * Retourne le nombre de retournements de pions
+     * @return le nombre de retournements de pions
+     */
+    public int getNbFlips() {
+        return this.nbFlips;
     }
 }
