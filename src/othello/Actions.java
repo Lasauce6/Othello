@@ -84,11 +84,8 @@ public class Actions {
         }
     }
 
-    public void play(Color color) {
-        play(color, false);
-    }
 
-    private void play(Color color, boolean loop) {
+    public void play(Color color) {
         board.setPossibleMoves(color);
         while (board.getMoves().size() > 0) {
             ArrayList<Point> possibleMoves = board.getMoves();
